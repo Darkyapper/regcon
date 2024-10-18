@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.recommended-actions {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 1.5rem;
+}
+
+.recommended-actions h1{
+    font-family: 'Tilt Neon', sans-serif;
+    font-size: 2rem;
+}
+
+.action-button {
+    background-color: #40B2A4;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.action-button:hover {
+    background-color: #339C8A;
+}
+
+.icon {
+    margin-right: 10px;
+}
