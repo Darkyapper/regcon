@@ -88,8 +88,32 @@ export default function Sidebar() {
                                         href="#"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
-                                        Usuarios
-                                    </a>
+                                        Crear Registros
+                                    </a>    
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Consultar Registros
+                                    </a>    
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Editar Registros
+                                    </a>    
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Crear Informe
+                                    </a>    
                                 </li>
                             </ul>
                         </li>
@@ -111,7 +135,31 @@ export default function Sidebar() {
                                         href="#"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
-                                        Usuarios
+                                        Crear Boletos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Administrar Boletos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Validar Boletos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Crear Informe
                                     </a>
                                 </li>
                             </ul>
@@ -134,7 +182,23 @@ export default function Sidebar() {
                                         href="#"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
-                                        Usuarios
+                                        Administrar Usuarios
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Registrar Usuarios
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Crear Informe
                                     </a>
                                 </li>
                             </ul>
@@ -157,7 +221,15 @@ export default function Sidebar() {
                                         href="#"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
-                                        Usuarios
+                                        Administrar Eventos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Crear Eventos
                                     </a>
                                 </li>
                             </ul>
@@ -180,7 +252,23 @@ export default function Sidebar() {
                                         href="#"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
-                                        Usuarios
+                                        Mi Equipo
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Administrar Equipo
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                    >
+                                        Mi Perfil
                                     </a>
                                 </li>
                             </ul>
