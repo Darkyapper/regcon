@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-navbar{
+    background-color: #EB6D1E;
+}
+
+.custom-navbar .custom-logo{
+    width: 8rem;
+}
+
+.custom-navbar .custom-icons{
+    color: #EDEDED;
+}
+
+.custom-navbar .custom-icons svg {
+    width: 2rem;
+    height: 2rem;
+}
