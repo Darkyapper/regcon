@@ -7,7 +7,7 @@ import logo from '../../assets/regcon-logo.png'
 
 export default function Navbar() {
     return (
-        <nav className="custom-navbar shadow-md">
+        <nav className="custom-navbar fixed top-0 left-0 w-full z-50 shadow-md">
             <div className="max-w-screen-xl mx-auto px-4 py-3 flex justify-between items-center">
                 <div className="flex items-center">
                     <img src={logo} className="custom-logo" alt="RegCon Logo"/>

@@ -1,0 +1,13 @@
+/* Sidebar.css */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-sidebar {
+    background-color: #EB6D1E; /* Color de fondo del sidebar */
+}
+
+.custom-sidebar a {
+    color: #EDEDED; /* Color del texto de los enlaces */
+}
