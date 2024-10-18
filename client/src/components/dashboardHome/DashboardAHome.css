@@ -1,12 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.custom-sidebar {
-    background-color: #EB6D1E;
-}
-
-.custom-sidebar a {
-    color: #EDEDED;
+.grid {
+    cursor: pointer;
 }
