@@ -33,6 +33,12 @@
 .button-custom{
     font-family: 'Noto Sans', sans-serif;
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 500;
     color: #000000;
+    transition: background-color 0.3s ease;
+}
+
+.button-custom:hover {
+    background-color: #38b2ac;
+    transform: scale(1.05);
 }
