@@ -1,14 +1,17 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LogInPage from './pages/LogInPage';
+import ScrollToTop from './components/scrollToTop/ScrollToTop';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      
-    </>
-  )
+    <Router>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<LogInPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
