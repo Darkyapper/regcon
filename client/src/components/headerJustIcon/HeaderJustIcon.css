@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-header{
+    background-color: #EB6D1E;
+}
+
+.custom-header .custom-logo{
+    width: 8rem;
+}

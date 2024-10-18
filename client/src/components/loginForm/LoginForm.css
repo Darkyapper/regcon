@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main-container {
+    padding-top: 6rem;
+}
+
+form {
+    margin-top: 0;
+    background-color: #DDDDDD;
+    color: black;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0px 12px 26px 5px rgba(0, 0, 0, 0.25);
+    font-family: 'Noto Sans', sans-serif;
+}
+form .info-form{
+    margin-bottom: 1.5rem;
+}
+
+form .title-form {
+    text-align: center;
+    font-family: "Tilt Neon";
+    font-size: 2.5rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+form .description-form {
+    text-align: center;
+    font-family: "Noto Sans";
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+form .button-to-access{
+    justify-content: center;
+    display: flex;
+    margin-top: 1rem;
+}
