@@ -1,11 +1,22 @@
 import React from 'react';
 import './LoginForm.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        // Aquí añadir la lógica para validar las credenciales del usuario
+        // Si las credenciales son correctas, redirigir a la página del dashboard
+        navigate('/dashboard');
+    };
+
     return (
         <div className='main-container'>
             <div className='custom-form'>
-                <form className="max-w-sm mx-auto">
+                <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
                     <div className="info-form">
                         <h1 className='title-form'>
                             Iniciar Sesión
