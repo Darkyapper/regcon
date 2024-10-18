@@ -2,12 +2,17 @@ import React from 'react';
 import './DashboardAHome.css';
 import { FiFilePlus, FiCheckCircle } from "react-icons/fi";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { useNavigate } from 'react-router-dom';
 
 export default function DashboardAHome() {
+    
+    const navigate = useNavigate();
+
     const handleActionClick = (action) => {
-        // Lógica para manejar clics en las acciones
+        if (action === 'Registrar') {
+            navigate('/register/add');
+        }
         console.log(`Action clicked: ${action}`);
-        // Aquí puedes redirigir a otras páginas o manejar la acción como desees
     };
 
     const currentHour = new Date().getHours();

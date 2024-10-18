@@ -84,12 +84,12 @@ export default function Sidebar() {
                             </button>
                             <ul className={`py-2 space-y-2 ${isRegistroOpen ? 'block' : 'hidden'}`}>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/register/add"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
                                         Crear Registros
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <a

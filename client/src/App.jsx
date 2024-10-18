@@ -4,6 +4,7 @@ import LogInPage from './pages/LogInPage';
 import ScrollToTop from './components/scrollToTop/ScrollToTop';
 import DashboardHome from './pages/DashboardHome';
 import DashboardSettings from './pages/DashboardSettings';
+import DashAddRegister from './pages/DashAddRegister';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<LogInPage />} />
         <Route path="/dashboard" element={<DashboardHome />} />
         <Route path="/settings" element={<DashboardSettings />} />
+        <Route path="/register/add" element={<DashAddRegister />} />
       </Routes>
     </Router>
   );
