@@ -62,13 +62,13 @@ export default function Sidebar() {
                 <div className="h-full px-3 py-4 overflow-y-auto bg-[#EB6D1E]">
                     <ul className="space-y-2 font-medium">
                         <li>
-                            <a
-                                href="#"
+                            <Link
+                                to="/dashboard"
                                 className="flex items-center p-2 text-[#EDEDED] rounded-lg hover:bg-gray-100 group"
                             >
                                 <FaHome className="w-5 h-5" />
                                 <span className="ms-3">Inicio</span>
-                            </a>
+                            </Link>
                         </li>
                         <li>
                             <button
@@ -89,7 +89,7 @@ export default function Sidebar() {
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
                                         Crear Registros
-                                    </a>    
+                                    </a>
                                 </li>
                                 <li>
                                     <a
@@ -97,7 +97,7 @@ export default function Sidebar() {
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
                                         Consultar Registros
-                                    </a>    
+                                    </a>
                                 </li>
                                 <li>
                                     <a
@@ -105,7 +105,7 @@ export default function Sidebar() {
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
                                         Editar Registros
-                                    </a>    
+                                    </a>
                                 </li>
                                 <li>
                                     <a
@@ -113,7 +113,7 @@ export default function Sidebar() {
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
                                         Crear Informe
-                                    </a>    
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -274,13 +274,10 @@ export default function Sidebar() {
                             </ul>
                         </li>
                         <li>
-                            <a
-                                href="#"
-                                className="flex items-center p-2 text-[#EDEDED] rounded-lg hover:bg-gray-100 group"
-                            >
+                            <Link to="/settings" className="flex items-center p-2 text-[#EDEDED] rounded-lg hover:bg-gray-100 group">
                                 <IoMdSettings className="w-5 h-5" />
                                 <span className="ms-3">Ajustes</span>
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
