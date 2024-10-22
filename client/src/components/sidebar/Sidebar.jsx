@@ -170,19 +170,19 @@ export default function Sidebar() {
                             </button>
                             <ul className={`py-2 space-y-2 ${isUsuariosOpen ? 'block' : 'hidden'}`}>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/users/add"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
-                                        Administrar Usuarios
-                                    </a>
+                                        Registrar Usuarios
+                                    </Link>
                                 </li>
                                 <li>
                                     <a
                                         href="#"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
-                                        Registrar Usuarios
+                                        Administrar Usuarios
                                     </a>
                                 </li>
                                 <li>
