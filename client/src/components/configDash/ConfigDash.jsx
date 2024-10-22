@@ -2,7 +2,7 @@ import React from 'react';
 import './ConfigDash.css';
 import { Link } from 'react-router-dom';
 import { IoSettingsSharp, IoHelpBuoy } from "react-icons/io5";
-import { FaUserCircle } from "react-icons/fa";
+import { FaUserCircle, FaKey } from "react-icons/fa";
 import { ImFilesEmpty } from "react-icons/im";
 import { IoIosLogOut, IoMdPrint } from "react-icons/io";
 
@@ -26,6 +26,10 @@ export default function ConfigDash() {
                 <button className="action-button flex items-center">
                     <ImFilesEmpty className="mr-2 text-lg" />
                     Documentación Oficial
+                </button>
+                <button className="action-button flex items-center">
+                    <FaKey className="mr-2 text-lg" />
+                    Licencia y activación
                 </button>
                 <button className="action-button flex items-center">
                     <IoHelpBuoy className="mr-2 text-lg" />
