@@ -40,6 +40,26 @@ app.get('/users', (req, res) => {
     });
 });
 
+app.get('/users/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'SELECT * FROM Users WHERE id = ?';
+    const params = [id];
+
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json({
+            message: 'Success',
+            data: row
+        });
+    });
+});
+
 app.post('/users', (req, res) => {
     const { first_name, last_name, email, phone } = req.body;
     const sql = 'INSERT INTO Users (first_name, last_name, email, phone) VALUES (?, ?, ?, ?)';
