@@ -104,14 +104,6 @@ export default function Sidebar() {
                                         href="#"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
                                     >
-                                        Editar Registros
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
-                                    >
                                         Crear Informe
                                     </a>
                                 </li>
