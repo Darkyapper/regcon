@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './UsersTable.css';
+import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import ConfirmDeleteModalU from '../confirmDeleteModalU/ConfirmDeleteModalU';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function UsersTable() {
+    const navigate = useNavigate();
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [usersPerPage] = useState(15);
@@ -81,8 +85,12 @@ export default function UsersTable() {
                             <td className="border px-4 py-2">{user.phone}</td>
                             <td className="border px-4 py-2">{user.registration_date}</td>
                             <td className="border px-4 py-2">
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => {/* Logica para editar */}}>Editar</button>
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(user.id)}>Borrar</button>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/users/edit/${user.id}`)}>
+                                    <FaEdit />
+                                </button>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(user.id)}>
+                                    <FaRegTrashAlt />
+                                </button>
                             </td>
                         </tr>
                     ))}
