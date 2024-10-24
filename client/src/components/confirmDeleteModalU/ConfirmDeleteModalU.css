@@ -9,6 +9,11 @@
     color: #121212;
 }
 
+.title-mdls{
+    font-family: 'Tilt Neon', sans-serif;
+    text-align: center;
+}
+
 .button-cs {
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
