@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-mdls{
+    font-family: 'Noto Sans', sans-serif;
+    color: #121212;
+}
+
+.button-cs {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-cs:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Cambia el fondo al pasar el cursor */
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+}

@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require('cors'); 
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 
 const dbPath = path.resolve(__dirname, './data/database.db');
@@ -22,7 +24,7 @@ process.on('SIGINT', () => {
             console.error('Error al cerrar la base de datos:', err.message);
         }
         console.log('Conexión a SQLite cerrada.');
-        process.exit(0);
+        process.exit(0);s
     });
 });
 

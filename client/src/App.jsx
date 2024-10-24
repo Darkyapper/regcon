@@ -6,6 +6,7 @@ import DashboardHome from './pages/DashboardHome';
 import DashboardSettings from './pages/DashboardSettings';
 import DashAddRegister from './pages/DashAddRegister';
 import DashAddUsers from './pages/DashAddUsers';
+import DashAdmUsers from './pages/DashAdmUsers';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/settings" element={<DashboardSettings />} />
         <Route path="/users/add" element={<DashAddUsers />} />
         <Route path="/register/add" element={<DashAddRegister />} />
+        <Route path="/users" element={<DashAdmUsers />} />
       </Routes>
     </Router>
   );

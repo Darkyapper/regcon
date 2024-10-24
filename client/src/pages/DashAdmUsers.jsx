@@ -1,18 +1,19 @@
 import React from 'react'
 import Navbar from '../components/navbar/Navbar'
 import Sidebar from '../components/sidebar/Sidebar'
-import RegisterUserForm from '../components/registerUserForm/RegisterUserForm'
+import UsersTable from '../components/usersTable/UsersTable'
 
 
 
-export default function DashAddUsers() {
+
+export default function DashAdmUsers() {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
             <div className="flex flex-grow">
                 <Sidebar />
                 <div className="flex-grow ml-64 p-4 mt-16">
-                    <RegisterUserForm />
+                    <UsersTable />
                 </div>
             </div>
         </div>
