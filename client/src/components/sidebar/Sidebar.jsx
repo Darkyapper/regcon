@@ -64,7 +64,7 @@ export default function Sidebar() {
                         <li>
                             <Link
                                 to="/dashboard"
-                                className="flex items-center p-2 text-[#EDEDED] rounded-lg hover:bg-gray-100 group"
+                                className="flex items-center p-2 text-[#EDEDED] rounded-lg hover:bg-orange-800 group"
                             >
                                 <FaHome className="w-5 h-5" />
                                 <span className="ms-3">Inicio</span>
@@ -73,7 +73,7 @@ export default function Sidebar() {
                         <li>
                             <button
                                 type="button"
-                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-gray-100"
+                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-orange-800"
                                 onClick={toggleRegistroMenu}
                             >
                                 <FaDatabase className="w-5 h-5" />
@@ -86,7 +86,7 @@ export default function Sidebar() {
                                 <li>
                                     <Link
                                         to="/register/add"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Crear Registros
                                     </Link>
@@ -94,7 +94,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Consultar Registros
                                     </a>
@@ -102,7 +102,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Crear Informe
                                     </a>
@@ -112,7 +112,7 @@ export default function Sidebar() {
                         <li>
                             <button
                                 type="button"
-                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-gray-100"
+                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-orange-800"
                                 onClick={toggleBoletosMenu}
                             >
                                 <FaRegFile className="w-5 h-5" />
@@ -125,7 +125,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Crear Boletos
                                     </a>
@@ -133,7 +133,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Administrar Boletos
                                     </a>
@@ -141,7 +141,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Validar Boletos
                                     </a>
@@ -149,7 +149,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Crear Informe
                                     </a>
@@ -159,7 +159,7 @@ export default function Sidebar() {
                         <li>
                             <button
                                 type="button"
-                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-gray-100"
+                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-orange-800"
                                 onClick={toggleUsuariosMenu}
                             >
                                 <HiOutlineUserGroup className="w-5 h-5" />
@@ -172,7 +172,7 @@ export default function Sidebar() {
                                 <li>
                                     <Link
                                         to="/users/add"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Registrar Usuarios
                                     </Link>
@@ -180,7 +180,7 @@ export default function Sidebar() {
                                 <li>
                                     <Link
                                         to="/users"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Administrar Usuarios
                                     </Link>
@@ -188,7 +188,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Crear Informe
                                     </a>
@@ -198,7 +198,7 @@ export default function Sidebar() {
                         <li>
                             <button
                                 type="button"
-                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-gray-100"
+                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-orange-800"
                                 onClick={toggleEventosMenu}
                             >
                                 <MdEvent className="w-5 h-5" />
@@ -211,7 +211,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Administrar Eventos
                                     </a>
@@ -219,7 +219,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Crear Eventos
                                     </a>
@@ -229,7 +229,7 @@ export default function Sidebar() {
                         <li>
                             <button
                                 type="button"
-                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-gray-100"
+                                className="flex items-center w-full p-2 text-base text-[#EDEDED] transition duration-75 rounded-lg group hover:bg-orange-800"
                                 onClick={toggleEquipoMenu}
                             >
                                 <HiOutlineUserGroup className="w-5 h-5" />
@@ -242,7 +242,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Mi Equipo
                                     </a>
@@ -250,7 +250,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Administrar Equipo
                                     </a>
@@ -258,7 +258,7 @@ export default function Sidebar() {
                                 <li>
                                     <a
                                         href="#"
-                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-gray-100"
+                                        className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Mi Perfil
                                     </a>
@@ -266,7 +266,7 @@ export default function Sidebar() {
                             </ul>
                         </li>
                         <li>
-                            <Link to="/settings" className="flex items-center p-2 text-[#EDEDED] rounded-lg hover:bg-gray-100 group">
+                            <Link to="/settings" className="flex items-center p-2 text-[#EDEDED] rounded-lg hover:bg-orange-800 group">
                                 <IoMdSettings className="w-5 h-5" />
                                 <span className="ms-3">Ajustes</span>
                             </Link>

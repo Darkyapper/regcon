@@ -16,4 +16,5 @@
 .button-cs:hover {
     background-color: rgba(0, 0, 0, 0.1); /* Cambia el fondo al pasar el cursor */
     transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+    color: #121212;
 }

@@ -81,8 +81,8 @@ export default function UsersTable() {
                             <td className="border px-4 py-2">{user.phone}</td>
                             <td className="border px-4 py-2">{user.registration_date}</td>
                             <td className="border px-4 py-2">
-                                <button className="button-cs text-blue-500 hover:text-blue-700" onClick={() => {/* Logica para editar */}}>Editar</button>
-                                <button className="button-cs text-red-500 hover:text-red-700 ml-2" onClick={() => handleDeleteClick(user.id)}>Borrar</button>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => {/* Logica para editar */}}>Editar</button>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(user.id)}>Borrar</button>
                             </td>
                         </tr>
                     ))}
