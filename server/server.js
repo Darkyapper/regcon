@@ -455,6 +455,20 @@ app.get('/ticket-with-counts', async (req, res) => {
         });
     });
 });
+app.get('/tickets/category/:category_id', async (req, res) => {
+    const { category_id } = req.params; // Obtiene el category_id de la URL
+    const sql = 'SELECT * FROM Tickets WHERE category_id = ?'; // Filtra por category_id
+
+    db.all(sql, [category_id], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({
+            message: 'Success',
+            data: rows
+        });
+    });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
