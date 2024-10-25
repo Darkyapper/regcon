@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './RegisterTicketForm.css';
 
 export default function RegisterTicketForm() {
+    const navigate = useNavigate();
+
+    const goToAdeministrarCategorias = (e) => {
+        e.preventDefault(); // Prevenir el comportamiento por defecto
+        navigate('/ticket-categories');
+    };
+
     const [formData, setFormData] = useState({
         name: '',
         category_id: '',
@@ -113,6 +121,13 @@ export default function RegisterTicketForm() {
                             </option>
                         ))}
                     </select>
+                    <button 
+                        type="button" // Asegúrate de que sea un botón de tipo "button"
+                        onClick={goToAdeministrarCategorias} 
+                        className='bg-yellow-400 py-1 px-2 mt-1 rounded font-medium hover:bg-yellow-600'
+                    >
+                        Administrar Categorías
+                    </button>
                 </div>
                 <div className="mb-4">
                     <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">Cantidad</label>
