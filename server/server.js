@@ -241,6 +241,205 @@ app.delete('/events/:id', (req, res) => {
     });
 });
 
+// Endpoints para categorías de boletos
+app.post('/ticket-categories', (req, res) => {
+    const { name, price, description } = req.body;
+    const sql = 'INSERT INTO TicketCategories (name, price, description) VALUES (?, ?, ?)';
+    const params = [name, price, description];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        res.json({
+            message: 'Ticket category created successfully',
+            data: {
+                id: this.lastID,
+                name,
+                price,
+                description
+            }
+        });
+    });
+});
+
+app.get('/ticket-categories', (req, res) => {
+    const sql = 'SELECT * FROM TicketCategories';
+    
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({
+            message: 'Success',
+            data: rows
+        });
+    });
+});
+
+app.get('/ticket-categories/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'SELECT * FROM TicketCategories WHERE id = ?';
+    const params = [id];
+
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ message: 'Ticket category not found' });
+        }
+        res.json({
+            message: 'Success',
+            data: row
+        });
+    });
+});
+
+app.put('/ticket-categories/:id', (req, res) => {
+    const { name, price, description } = req.body;
+    const { id } = req.params;
+
+    const sql = `
+        UPDATE TicketCategories
+        SET name = ?, price = ?, description = ?
+        WHERE id = ?
+    `;
+    const params = [name, price, description, id];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Ticket category not found' });
+        }
+        res.json({
+            message: 'Ticket category updated successfully',
+            data: { id, name, price, description }
+        });
+    });
+});
+
+app.delete('/ticket-categories/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM TicketCategories WHERE id = ?';
+
+    db.run(sql, id, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Ticket category not found' });
+        }
+        res.json({
+            message: 'Ticket category deleted successfully',
+            data: { id }
+        });
+    });
+});
+
+// Endpoints para boletos
+app.post('/tickets', (req, res) => {
+    const { code, name, category_id, status } = req.body;
+    const sql = 'INSERT INTO Tickets (code, name, category_id, status) VALUES (?, ?, ?, ?)';
+    const params = [code, name, category_id, status];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        res.json({
+            message: 'Ticket created successfully',
+            data: {
+                code,
+                name,
+                category_id,
+                status
+            }
+        });
+    });
+});
+
+app.get('/tickets', (req, res) => {
+    const sql = 'SELECT * FROM Tickets';
+    
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({
+            message: 'Success',
+            data: rows
+        });
+    });
+});
+
+app.get('/tickets/:code', (req, res) => {
+    const { code } = req.params;
+
+    const sql = 'SELECT * FROM Tickets WHERE code = ?';
+    const params = [code];
+
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ message: 'Ticket not found' });
+        }
+        res.json({
+            message: 'Success',
+            data: row
+        });
+    });
+});
+
+app.put('/tickets/:code', (req, res) => {
+    const { name, category_id, status } = req.body;
+    const { code } = req.params;
+
+    const sql = `
+        UPDATE Tickets
+        SET name = ?, category_id = ?, status = ?
+        WHERE code = ?
+    `;
+    const params = [name, category_id, status, code];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Ticket not found' });
+        }
+        res.json({
+            message: 'Ticket updated successfully',
+            data: { code, name, category_id, status }
+        });
+    });
+});
+
+app.delete('/tickets/:code', (req, res) => {
+    const { code } = req.params;
+
+    const sql = 'DELETE FROM Tickets WHERE code = ?';
+
+    db.run(sql, code, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Ticket not found' });
+        }
+        res.json({
+            message: 'Ticket deleted successfully',
+            data: { code }
+        });
+    });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

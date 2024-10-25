@@ -12,6 +12,7 @@ import UsersPrint from './pages/UsersPrint';
 import DashAddEvent from './pages/DashAddEvent';
 import DashAdmEvents from './pages/DashAdmEvents';
 import EventsEditEvent from './pages/EventsEditEvent';
+import DashAddTickets from './pages/DashAddTickets';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/events/add" element={<DashAddEvent />} />
         <Route path="/events" element={<DashAdmEvents />} />
         <Route path="/events/edit/:id" element={<EventsEditEvent />} />
+        <Route path="/tickets/add" element={<DashAddTickets />} />
       </Routes>
     </Router>
   );
