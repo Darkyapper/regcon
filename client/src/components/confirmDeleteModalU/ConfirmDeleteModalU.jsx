@@ -12,7 +12,7 @@ export default function ConfirmDeleteModalU({ isOpen, onClose, onConfirm }) {
                     <CiCircleAlert className="text-red-600 text-6xl" />
                 </div>
                 <h2 className="title-mdls text-lg font-semibold">Confirmar Eliminación</h2>
-                <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+                <p>¿Estás seguro de que deseas eliminar este elemento?</p>
                 <div className="mt-4 flex justify-end">
                     <button className="button-cs mr-2 px-4 py-2 bg-gray-300 rounded" onClick={onClose}>Cancelar</button>
                     <button className="button-cs px-4 py-2 bg-red-600 text-white rounded" onClick={onConfirm}>Eliminar</button>

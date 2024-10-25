@@ -40,7 +40,7 @@ process.on('SIGINT', () => {
     });
 });
 
-// Enpoints
+// Enpoints para usuarios
 app.get('/users', (req, res) => {
     const sql = 'SELECT * FROM Users';
     db.all(sql, [], (err, rows) => {
@@ -135,6 +135,107 @@ app.delete('/users/:id', (req, res) => {
         }
         res.json({
             message: 'User deleted successfully',
+            data: { id }
+        });
+    });
+});
+
+// Endpoints para eventos
+app.post('/events', (req, res) => {
+    const { name, event_date, location, description } = req.body;
+    const sql = 'INSERT INTO Events (name, event_date, location, description) VALUES (?, ?, ?, ?)';
+    const params = [name, event_date, location, description];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        res.json({
+            message: 'Event created successfully',
+            data: {
+                id: this.lastID,
+                name,
+                event_date,
+                location,
+                description
+            }
+        });
+    });
+});
+
+app.get('/events', (req, res) => {
+    const sql = 'SELECT * FROM Events';
+    
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({
+            message: 'Success',
+            data: rows
+        });
+    });
+});
+
+app.get('/events/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'SELECT * FROM Events WHERE id = ?';
+    const params = [id];
+
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        res.json({
+            message: 'Success',
+            data: row
+        });
+    });
+});
+
+app.put('/events/:id', (req, res) => {
+    const { name, event_date, location, description } = req.body;
+    const { id } = req.params;
+
+    const sql = `
+        UPDATE Events
+        SET name = ?, event_date = ?, location = ?, description = ?
+        WHERE id = ?
+    `;
+    const params = [name, event_date, location, description, id];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        res.json({
+            message: 'Event updated successfully',
+            data: { id, name, event_date, location, description }
+        });
+    });
+});
+
+app.delete('/events/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM Events WHERE id = ?';
+
+    db.run(sql, id, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        res.json({
+            message: 'Event deleted successfully',
             data: { id }
         });
     });

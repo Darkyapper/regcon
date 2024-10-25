@@ -9,6 +9,8 @@ import DashAddUsers from './pages/DashAddUsers';
 import DashAdmUsers from './pages/DashAdmUsers';
 import UsersEditUser from './pages/UsersEditUser';
 import UsersPrint from './pages/UsersPrint';
+import DashAddEvent from './pages/DashAddEvent';
+import DashAdmEvents from './pages/DashAdmEvents';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/users" element={<DashAdmUsers />} />
         <Route path="/users/edit/:id" element={<UsersEditUser />} />
         <Route path="/users/print" element={<UsersPrint />} />
+        <Route path="/events/add" element={<DashAddEvent />} />
+        <Route path="/events" element={<DashAdmEvents />} />
       </Routes>
     </Router>
   );

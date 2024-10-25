@@ -209,20 +209,20 @@ export default function Sidebar() {
                             </button>
                             <ul className={`py-2 space-y-2 ${isEventosOpen ? 'block' : 'hidden'}`}>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/events"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Administrar Eventos
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/events/add"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Crear Eventos
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </li>

@@ -12,6 +12,12 @@ export default function DashboardAHome() {
         if (action === 'Registrar') {
             navigate('/register/add');
         }
+        else if (action === 'Validar Boletos') {
+            navigate('/tickets/validate');
+        }
+        else if (action === 'Crear Evento') {
+            navigate('/events/add');
+        }
         console.log(`Action clicked: ${action}`);
     };
 
