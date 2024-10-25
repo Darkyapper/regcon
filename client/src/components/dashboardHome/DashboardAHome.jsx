@@ -23,7 +23,7 @@ export default function DashboardAHome() {
         } else if (currentHour < 18) {
             return "¡Bienvendo, buenas tardes!";
         } else {
-            return "¡Bienvenido buenas noches!";
+            return "¡Bienvenido, buenas noches!";
         }
     };
 

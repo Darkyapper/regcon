@@ -2,9 +2,21 @@ const express = require('express');
 const cors = require('cors'); 
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // La carpeta donde se guardarán los archivos subidos
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`); // Renombrar el archivo
+    }
+});
+
+const upload = multer({ storage });
 
 app.use(cors());
 app.use(express.json());

@@ -8,6 +8,7 @@ import DashAddRegister from './pages/DashAddRegister';
 import DashAddUsers from './pages/DashAddUsers';
 import DashAdmUsers from './pages/DashAdmUsers';
 import UsersEditUser from './pages/UsersEditUser';
+import UsersPrint from './pages/UsersPrint';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/register/add" element={<DashAddRegister />} />
         <Route path="/users" element={<DashAdmUsers />} />
         <Route path="/users/edit/:id" element={<UsersEditUser />} />
+        <Route path="/users/print" element={<UsersPrint />} />
       </Routes>
     </Router>
   );

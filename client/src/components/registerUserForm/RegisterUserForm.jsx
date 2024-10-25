@@ -38,7 +38,7 @@ export default function RegisterUserForm() {
 
     return (
         <div className="register-user-form p-4 bg-white rounded-lg shadow-md">
-            <h2 className="text-lg mb-4">Registrar Nuevo Usuario</h2>
+            <h2 className="custom-wawa text-lg mb-4">Registrar Nuevo Usuario</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">Nombre</label>
