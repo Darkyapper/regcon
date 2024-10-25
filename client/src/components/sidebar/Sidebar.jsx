@@ -131,12 +131,12 @@ export default function Sidebar() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/tickets"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Administrar Boletos
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <a

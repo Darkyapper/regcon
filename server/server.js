@@ -441,6 +441,21 @@ app.delete('/tickets/:code', (req, res) => {
     });
 });
 
+// Endpoint para tener Boleto y sus categorias
+app.get('/ticket-with-counts', async (req, res) => {
+    const sql = 'SELECT * FROM TicketCategoriesWithCounts';
+    
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({
+            message: 'Success',
+            data: rows
+        });
+    });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

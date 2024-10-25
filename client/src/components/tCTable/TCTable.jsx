@@ -9,7 +9,7 @@ export default function TCTable() {
     const navigate = useNavigate();
     const [tC, setTC] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [tCPerPage] = useState(15);
+    const [tCPerPage] = useState(8);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tCToDelete, setTCToDelete] = useState(null);
 
@@ -75,7 +75,7 @@ export default function TCTable() {
                     <button className="button-cs mx-1 px-3 py-2 rounded bg-orange-500 text-white hover:text-black" onClick={handleBackClick}>
                         <IoArrowBackOutline />
                     </button>
-                    <h2 className="title-uts text-lg">Editar Categorías</h2>
+                    <h2 className="title-uts text-lg">Administrar Categorías de Boletos</h2>
                 </div>
                 <button
                     className="bg-teal-400 text-white py-2 px-4 rounded hover:bg-teal-500"
