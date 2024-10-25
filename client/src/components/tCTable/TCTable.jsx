@@ -99,7 +99,7 @@ export default function TCTable() {
                         <tr key={tC.id}>
                             <td className="border px-4 py-2">{tC.id}</td>
                             <td className="border px-4 py-2">{tC.name}</td>
-                            <td className="border px-4 py-2">{tC.price}</td>
+                            <td className="border px-4 py-2">${tC.price}</td>
                             <td className="border px-4 py-2">{tC.description}</td>
                             <td className="border px-4 py-2">
                                 <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/ticket-categories/edit/${tC.id}`)}>

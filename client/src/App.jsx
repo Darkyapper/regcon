@@ -14,6 +14,8 @@ import DashAdmEvents from './pages/DashAdmEvents';
 import EventsEditEvent from './pages/EventsEditEvent';
 import DashAddTickets from './pages/DashAddTickets';
 import DashAdmTC from './pages/DashAdmTC';
+import DashAddTC from './pages/DashAddTC';
+import TCsEditTC from './pages/TCsEditTC';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
         <Route path="/events/edit/:id" element={<EventsEditEvent />} />
         <Route path="/tickets/add" element={<DashAddTickets />} />
         <Route path="/ticket-categories" element={<DashAdmTC />} />
+        <Route path="/ticket-categories/add" element={<DashAddTC />} />
+        <Route path="/ticket-categories/edit/:id" element={<TCsEditTC />} />
       </Routes>
     </Router>
   );
