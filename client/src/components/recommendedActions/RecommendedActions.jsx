@@ -8,7 +8,7 @@ export default function RecommendedActions() {
 
     const selectActionClic = (action) => {
         if (action === 'Crear boletos nuevos') {
-            console.log('Crear boletos nuevos');
+            navigate('/tickets/add');
         } else if (action === 'Registre a sus usuarios') {
             navigate('/users/add');
         } else if (action === 'Crear e imprimir informes') {

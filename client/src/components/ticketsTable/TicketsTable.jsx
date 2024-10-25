@@ -80,7 +80,7 @@ export default function TicketsTable() {
                             <td className="border px-4 py-2">{tc.ticket_count}</td>
                             <td className="border px-4 py-2">{tc.description}</td>
                             <td className="border px-4 py-2">
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/ticket-categories/edit/${tc.id}`)}>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/tickets/categories/${tc.id}`)}>
                                     <FaEye  />
                                 </button>
                                 <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/ticket-categories/edit/${tc.id}`)}>
