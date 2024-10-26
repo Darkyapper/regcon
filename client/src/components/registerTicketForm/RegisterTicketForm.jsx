@@ -60,7 +60,7 @@ export default function RegisterTicketForm() {
                 code: generateUniqueCode(), // Generar un nuevo código único
                 name: name,
                 category_id: category_id,
-                status: 'disponible' // Establecer el estado por defecto
+                status: 'Sin Usar' // Establecer el estado por defecto
             };
             ticketPromises.push(
                 fetch('http://localhost:3000/tickets', {

@@ -470,6 +470,40 @@ app.get('/tickets/category/:category_id', async (req, res) => {
     });
 });
 
+// Endpoint para tener los boletos con su información completa
+app.get('/ticket-view', (req, res) => {
+    const sql = 'SELECT * FROM TicketFullInfo';
+    
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({
+            message: 'Success',
+            data: rows
+        });
+    });
+});
+
+app.get('/ticket-view/:code', (req, res) => {
+    const { code } = req.params;
+    const sql = 'SELECT * FROM TicketFullInfo WHERE code = ?';
+    const params = [code];
+
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ message: 'Ticket not found' });
+        }
+        res.json({
+            message: 'Success',
+            data: row
+        });
+    });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

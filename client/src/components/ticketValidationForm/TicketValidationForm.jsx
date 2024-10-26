@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './TicketValidationForm.css';
 
-const TicketValidationForm = () => {
+export default function TicketValidationForm() {
+    const navigate = useNavigate();
     const [ticketCode, setTicketCode] = useState('');
     const [ticketInfo, setTicketInfo] = useState(null);
     const [error, setError] = useState('');
@@ -10,26 +13,44 @@ const TicketValidationForm = () => {
     };
 
     const handleValidate = async () => {
+        if (!ticketCode.trim()) {
+            setError('El código del boleto no puede estar vacío.'); // Error si el campo está vacío
+            setTicketInfo(null);
+            return;
+        }
+
         try {
-            const response = await fetch(`http://localhost:3000/tickets/${ticketCode}`); // Adjust the endpoint as necessary
+            const response = await fetch(`http://localhost:3000/ticket-view/${ticketCode}`);
             const data = await response.json();
             if (response.ok) {
-                setTicketInfo(data.data); // Assuming data contains the ticket information
-                setError(''); // Clear any previous errors
+                setTicketInfo(data.data);
+                setError('');
             } else {
                 setError('Este boleto no existe o es inválido.');
-                setTicketInfo(null); // Clear ticket info
+                setTicketInfo(null);
             }
         } catch (error) {
             console.error('Error:', error);
-            setError('Error al validar el boleto.'); // Handle error
+            setError('Error al validar el boleto.');
             setTicketInfo(null);
         }
     };
 
+    const handleAddCategory = () => {
+        navigate('/ticket-categories/add'); // Navegar a la página de añadir categorías
+    };
+
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md">
-            <h2 className="text-lg mb-4">Validar Boletos</h2>
+        <div className="custom-cs-tb p-4 bg-white rounded-lg shadow-md">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="title-uts text-lg">Validar Boletos</h2>
+                <button
+                    className="bg-teal-400 text-white py-2 px-4 rounded hover:bg-teal-500"
+                    onClick={handleAddCategory}
+                >
+                    Escaneo por QR
+                </button>
+            </div>
             <div className="mb-4">
                 <label htmlFor="ticketCode" className="block text-sm font-medium text-gray-700">Código del Boleto</label>
                 <input
@@ -48,24 +69,25 @@ const TicketValidationForm = () => {
                 Validar Boleto
             </button>
 
-            {/* Error message */}
-            {error && <p className="text-red-500 mt-4">{error}</p>}
+            {/* Mensaje de error */}
+            {error && (
+                <div className="mt-4 p-4 border rounded bg-red-100">
+                    <p className="text-red-500">{error}</p>
+                </div>
+            )}
 
-            {/* Ticket Information */}
+            {/* Información del ticket */}
             {ticketInfo && (
                 <div className="mt-4 p-4 border rounded bg-green-100">
                     <h3 className="text-lg font-bold">Información del Boleto</h3>
-                    <p><strong>Nombre:</strong> {ticketInfo.name}</p>
                     <p><strong>Código:</strong> {ticketInfo.code}</p>
-                    <p><strong>Tipo:</strong> {ticketInfo.type}</p>
-                    <p><strong>Costo:</strong> ${ticketInfo.price}</p>
-                    <p><strong>Descripción:</strong> {ticketInfo.description}</p>
+                    <p><strong>Nombre:</strong> {ticketInfo.ticket_name}</p>
+                    <p><strong>Categoria:</strong> {ticketInfo.category_name}</p>
+                    <p><strong>Costo:</strong> ${ticketInfo.category_price}</p>
+                    <p><strong>Descripción:</strong> {ticketInfo.category_description}</p>
                     <p><strong>Estado:</strong> {ticketInfo.status}</p>
-                    <p><strong>Dueño:</strong> {ticketInfo.owner}</p>
                 </div>
             )}
         </div>
     );
 };
-
-export default TicketValidationForm;
