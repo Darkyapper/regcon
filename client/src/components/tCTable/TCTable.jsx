@@ -69,13 +69,13 @@ export default function TCTable() {
     };
 
     return (
-        <div className="custom-cs p-4 bg-white rounded-lg shadow-md">
+        <div className="custom-cs-a p-4 bg-white rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
                 <div className="edit-div-cs flex flex-row items-center">
                     <button className="button-cs mx-1 px-3 py-2 rounded bg-orange-500 text-white hover:text-black" onClick={handleBackClick}>
                         <IoArrowBackOutline />
                     </button>
-                    <h2 className="title-uts text-lg">Administrar Categorías de Boletos</h2>
+                    <h2 className="title-uts-av">Administrar Categorías de Boletos</h2>
                 </div>
                 <button
                     className="bg-teal-400 text-white py-2 px-4 rounded hover:bg-teal-500"
