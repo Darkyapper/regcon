@@ -19,6 +19,7 @@ import TCsEditTC from './pages/TCsEditTC';
 import DashAdmTickets from './pages/DashAdmTickets';
 import TicketCategorizedTableW from './pages/TicketCategorizedTableW';
 import TicketValidation from './pages/TicketValidation';
+import TicketValQR from './pages/TicketValQR';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="/tickets" element={<DashAdmTickets />} />
         <Route path="/tickets/categories/:category_id" element={<TicketCategorizedTableW />} />
         <Route path="/tickets/validate" element={<TicketValidation />} />
+        <Route path="/tickets/validate/qr" element={<TicketValQR />} />
       </Routes>
     </Router>
   );

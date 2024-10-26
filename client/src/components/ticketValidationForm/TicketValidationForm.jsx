@@ -18,10 +18,13 @@ export default function TicketValidationForm() {
             setTicketInfo(null);
             return;
         }
-
+    
+        console.log("Validando código del boleto:", ticketCode); // Agregado para depuración
+    
         try {
             const response = await fetch(`http://localhost:3000/ticket-view/${ticketCode}`);
             const data = await response.json();
+            console.log("Respuesta de la API:", data); // Agregado para depuración
             if (response.ok) {
                 setTicketInfo(data.data);
                 setError('');
@@ -35,15 +38,16 @@ export default function TicketValidationForm() {
             setTicketInfo(null);
         }
     };
+    
 
     const handleAddCategory = () => {
-        navigate('/ticket-categories/add'); // Navegar a la página de añadir categorías
+        navigate('/tickets/validate/qr'); // Navegar a la página de añadir categorías
     };
 
     return (
-        <div className="custom-cs-tb p-4 bg-white rounded-lg shadow-md">
+        <div className="custom-cs-tb-tb p-4 bg-white rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="title-uts text-lg">Validar Boletos</h2>
+                <h2 className="title-uts">Validar Boletos</h2>
                 <button
                     className="bg-teal-400 text-white py-2 px-4 rounded hover:bg-teal-500"
                     onClick={handleAddCategory}
