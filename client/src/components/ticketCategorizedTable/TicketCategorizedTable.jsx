@@ -83,7 +83,7 @@ export default function TicketCategorizedTable() {
                     <button className="button-cs mx-1 px-3 py-2 rounded bg-orange-500 text-white hover:text-black" onClick={handleBackClick}>
                         <IoArrowBackOutline />
                     </button>
-                    <h2 className="title-uts text-lg">Administrar Boletos por Categorías</h2>
+                    <h2 className="title-uts">Administrar Boletos por Categorías</h2>
                 </div>
                 <button
                     className="bg-teal-400 text-white py-2 px-4 rounded hover:bg-teal-500"

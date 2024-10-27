@@ -6,6 +6,7 @@
 
 .qr-scanner-container {
     max-width: 600px;
+    font-family:'Noto Sans', sans-serif;
     margin: auto;
     padding: 20px;
     background-color: white;
@@ -14,5 +15,11 @@
 }
 
 .qr-scanner-container h2 {
+    font-family: 'Tilt Neon', sans-serif;
+    font-size: 2rem;
     text-align: center;
+}
+
+.qr-scanner-cs{
+    margin-left: 3.5rem;
 }

@@ -39,11 +39,11 @@ export default function QRCodeReaderVal() {
     return (
         <div className="qr-scanner-container">
             <h2 className="text-lg mb-4">Escanear Código QR</h2>
-            <QrScanner
+            <QrScanner  className="qr-scanner-cs"
                 delay={300}
                 onError={handleError}
                 onScan={handleScan}
-                style={{ width: '100%' }}
+                style={{ width: '80%' }}
             />
             {error && (
                 <div className="mt-4 p-4 border rounded bg-red-100">
