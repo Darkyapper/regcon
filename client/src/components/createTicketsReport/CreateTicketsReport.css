@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.create-report-form {
+    font-family: 'Noto Sans', sans-serif;
+    padding: 0.5rem 1.5rem 2rem 1.3rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-au-title {
+    font-family: 'Tilt Neon', sans-serif;
+    font-size: 2rem;
+    color: #121212;
+    margin-bottom: 1rem;
+}
+
+.custom-div-cs {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Cambiar a flex-start para alinear el formulario con la parte superior */
+}
+
+.image-example {
+    width: 17.5rem;
+    margin-right: 2rem; /* Espacio entre la imagen y el formulario */
+}
+
+.form-report {
+    flex-grow: 1; /* Para que el formulario ocupe el espacio restante */
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.button-imprimir {
+    background-color: #40B2A4; /* Color para el botón de imprimir */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button-imprimir:hover {
+    background-color: #339C8A; /* Color más oscuro al pasar el mouse */
+}
