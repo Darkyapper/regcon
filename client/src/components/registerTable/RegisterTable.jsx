@@ -88,7 +88,7 @@ export default function RegisterTable() {
                             <td className="border px-4 py-2">{registration.ticket_category}</td>
                             <td className="border px-4 py-2">{registration.registration_date}</td>
                             <td className="border px-4 py-2">
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/registrations/edit/${registration.registration_id}`)}>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/register/edit/${registration.registration_id}`)}>
                                     <FaEdit />
                                 </button>
                                 <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(registration.registration_id)}>
