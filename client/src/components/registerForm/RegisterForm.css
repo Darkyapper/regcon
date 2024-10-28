@@ -4,11 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.register-user-form {
+.register-r-form {
     font-family: 'Noto Sans', sans-serif;
 }
 
-.register-user-form .custom-wawa {
+.register-r-form .custom-wawa {
     font-family: 'Tilt Neon', sans-serif;
     font-size: 2rem;
     margin-bottom: 1rem;

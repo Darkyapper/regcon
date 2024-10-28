@@ -123,7 +123,7 @@ export default function RegisterForm() {
     };
 
     return (
-        <div className="register-user-form p-4 bg-white rounded-lg shadow-md">
+        <div className="register-r-form p-4 bg-white rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="custom-wawa">Crear Registro de Asistencia</h2>
                 <button

@@ -618,6 +618,40 @@ app.delete('/registro/:id', (req, res) => {
     });
 });
 
+// Endpoint para tener los registros con su información completa
+app.get('/registrations/details', (req, res) => {
+    const sql = 'SELECT * FROM RegistrationDetails';
+    
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({
+            message: 'Success',
+            data: rows
+        });
+    });
+});
+
+app.get('/registrations/details/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'SELECT * FROM RegistrationDetails WHERE registration_id = ?';
+    const params = [id];
+
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ message: 'Registration not found' });
+        }
+        res.json({
+            message: 'Success',
+            data: row
+        });
+    });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
