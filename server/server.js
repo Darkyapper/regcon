@@ -504,6 +504,120 @@ app.get('/ticket-view/:code', (req, res) => {
     });
 });
 
+
+// Endpoints para registros
+app.get('/registro', (req, res) => {
+    const sql = 'SELECT * FROM Registration';
+    
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({
+            message: 'Success',
+            data: rows
+        });
+    });
+});
+
+app.get('/registro/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'SELECT * FROM Registration WHERE id = ?';
+    const params = [id];
+
+    db.get(sql, params, (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ message: 'Registration not found' });
+        }
+        res.json({
+            message: 'Success',
+            data: row
+        });
+    });
+});
+
+app.post('/registro', (req, res) => {
+    const { user_id, event_id, ticket_code } = req.body;
+
+    // Primero, verifica el estado del boleto
+    const sqlCheckTicket = 'SELECT status FROM Tickets WHERE code = ?';
+    db.get(sqlCheckTicket, [ticket_code], (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!row || row.status !== 'Sin Usar') {
+            return res.status(400).json({ error: 'Este boleto es inválido o ya ha sido usado.' });
+        }
+
+        // Si el boleto es válido, proceder con la inserción
+        const sql = 'INSERT INTO Registration (user_id, event_id, ticket_code) VALUES (?, ?, ?)';
+        const params = [user_id, event_id, ticket_code];
+
+        db.run(sql, params, function(err) {
+            if (err) {
+                return res.status(400).json({ error: err.message });
+            }
+            res.json({
+                message: 'Registration created successfully',
+                data: {
+                    id: this.lastID,
+                    user_id,
+                    event_id,
+                    ticket_code,
+                    registration_date: new Date().toISOString() // Fecha de registro actual
+                }
+            });
+        });
+    });
+});
+
+app.put('/registro/:id', (req, res) => {
+    const { user_id, event_id, ticket_code } = req.body;
+    const { id } = req.params;
+
+    const sql = `
+        UPDATE Registration
+        SET user_id = ?, event_id = ?, ticket_code = ?
+        WHERE id = ?
+    `;
+    const params = [user_id, event_id, ticket_code, id];
+
+    db.run(sql, params, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Registration not found' });
+        }
+        res.json({
+            message: 'Registration updated successfully',
+            data: { id, user_id, event_id, ticket_code }
+        });
+    });
+});
+
+app.delete('/registro/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM Registration WHERE id = ?';
+
+    db.run(sql, id, function(err) {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ message: 'Registration not found' });
+        }
+        res.json({
+            message: 'Registration deleted successfully',
+            data: { id }
+        });
+    });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
