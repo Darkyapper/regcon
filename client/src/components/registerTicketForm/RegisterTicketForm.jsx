@@ -85,6 +85,7 @@ export default function RegisterTicketForm() {
             }
         } catch (error) {
             console.error('Error:', error);
+            alert('Error al registrar los boletos.'); // Mensaje de error
         }
     };
 
@@ -121,9 +122,9 @@ export default function RegisterTicketForm() {
                             </option>
                         ))}
                     </select>
-                    <button 
+                    <button
                         type="button" // Asegúrate de que sea un botón de tipo "button"
-                        onClick={goToAdeministrarCategorias} 
+                        onClick={goToAdeministrarCategorias}
                         className='bg-yellow-400 py-1 px-2 mt-1 rounded font-medium hover:bg-yellow-600'
                     >
                         Administrar Categorías

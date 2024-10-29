@@ -10,11 +10,11 @@ export default function QRCodeReaderVal() {
     // Maneja el escaneo exitoso del QR
     const handleScan = async (data) => {
         if (data) {
-            const code = data.text; // Asegúrate de que estás extrayendo el código correctamente
+            const code = data.text; // Extrae el código correctamente
             setResult(code);
 
             try {
-                const response = await fetch(`http://localhost:3000/ticket-view/${code.trim()}`); // Ajusta la URL según sea necesario
+                const response = await fetch(`http://localhost:3000/ticket-view/${code.trim()}`); // URL para validar el boleto
                 const info = await response.json();
                 if (response.ok) {
                     setTicketInfo(info.data); // Almacena la información del boleto
@@ -39,7 +39,8 @@ export default function QRCodeReaderVal() {
     return (
         <div className="qr-scanner-container">
             <h2 className="text-lg mb-4">Escanear Código QR</h2>
-            <QrScanner  className="qr-scanner-cs"
+            <QrScanner
+                className="qr-scanner-cs"
                 delay={300}
                 onError={handleError}
                 onScan={handleScan}

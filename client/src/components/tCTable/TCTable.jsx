@@ -7,19 +7,19 @@ import { IoArrowBackOutline } from "react-icons/io5";
 
 export default function TCTable() {
     const navigate = useNavigate();
-    const [tC, setTC] = useState([]);
+    const [ticketCategories, setTicketCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [tCPerPage] = useState(8);
+    const [ticketCategoriesPerPage] = useState(8);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [tCToDelete, setTCToDelete] = useState(null);
+    const [categoryToDelete, setCategoryToDelete] = useState(null);
 
     useEffect(() => {
-        const fetchTC = async () => {
+        const fetchTicketCategories = async () => {
             try {
                 const response = await fetch('http://localhost:3000/ticket-categories');
                 const data = await response.json();
                 if (response.ok) {
-                    setTC(data.data); // Suponiendo que 'data' contiene la lista de categorías
+                    setTicketCategories(data.data); // Suponiendo que 'data' contiene la lista de categorías
                 } else {
                     console.error('Error fetching ticket categories:', data.error);
                 }
@@ -27,23 +27,23 @@ export default function TCTable() {
                 console.error('Error:', error);
             }
         };
-        fetchTC();
+        fetchTicketCategories();
     }, []);
 
     const handleDeleteClick = (id) => {
-        setTCToDelete(id);
+        setCategoryToDelete(id);
         setIsModalOpen(true);
     };
 
     const confirmDelete = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/ticket-categories/${tCToDelete}`, {
+            const response = await fetch(`http://localhost:3000/ticket-categories/${categoryToDelete}`, {
                 method: 'DELETE',
             });
 
             if (response.ok) {
                 alert('Categoría de boleto eliminada exitosamente');
-                setTC(tC.filter(tC => tC.id !== tCToDelete));
+                setTicketCategories(ticketCategories.filter(category => category.id !== categoryToDelete));
             } else {
                 alert('Error al eliminar la categoría de boleto');
             }
@@ -54,9 +54,9 @@ export default function TCTable() {
     };
 
     // Paginación
-    const indexOfLastTC = currentPage * tCPerPage;
-    const indexOfFirstTC = indexOfLastTC - tCPerPage;
-    const currentTC = tC.slice(indexOfFirstTC, indexOfLastTC);
+    const indexOfLastCategory = currentPage * ticketCategoriesPerPage;
+    const indexOfFirstCategory = indexOfLastCategory - ticketCategoriesPerPage;
+    const currentTicketCategories = ticketCategories.slice(indexOfFirstCategory, indexOfLastCategory);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -95,17 +95,17 @@ export default function TCTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentTC.map(tC => (
-                        <tr key={tC.id}>
-                            <td className="border px-4 py-2">{tC.id}</td>
-                            <td className="border px-4 py-2">{tC.name}</td>
-                            <td className="border px-4 py-2">${tC.price}</td>
-                            <td className="border px-4 py-2">{tC.description}</td>
+                    {currentTicketCategories.map(category => (
+                        <tr key={category.id}>
+                            <td className="border px-4 py-2">{category.id}</td>
+                            <td className="border px-4 py-2">{category.name}</td>
+                            <td className="border px-4 py-2">${category.price}</td>
+                            <td className="border px-4 py-2">{category.description}</td>
                             <td className="border px-4 py-2">
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/ticket-categories/edit/${tC.id}`)}>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/ticket-categories/edit/${category.id}`)}>
                                     <FaEdit />
                                 </button>
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(tC.id)}>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(category.id)}>
                                     <FaRegTrashAlt />
                                 </button>
                             </td>
@@ -115,7 +115,7 @@ export default function TCTable() {
             </table>
             {/* Paginación */}
             <div className="flex justify-center mt-4">
-                {[...Array(Math.ceil(tC.length / tCPerPage))].map((_, index) => (
+                {[...Array(Math.ceil(ticketCategories.length / ticketCategoriesPerPage))].map((_, index) => (
                     <button key={index} onClick={() => paginate(index + 1)} className={`button-cs mx-1 px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-teal-400 text-white' : 'bg-gray-200'}`}>
                         {index + 1}
                     </button>

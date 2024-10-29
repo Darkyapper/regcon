@@ -4,22 +4,21 @@ import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import ConfirmDeleteModalU from '../confirmDeleteModalU/ConfirmDeleteModalU';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function EventsTable() {
     const navigate = useNavigate();
     const [events, setEvents] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [eventsPerPage] = useState(5); // Cambiado de usersPerPage a eventsPerPage
+    const [eventsPerPage] = useState(5);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [eventToDelete, setEventToDelete] = useState(null); // Cambiado de setUserToDelete a setEventToDelete
+    const [eventToDelete, setEventToDelete] = useState(null);
 
     useEffect(() => {
-        const fetchEvents = async () => { // Cambiado fetchUsers a fetchEvents
+        const fetchEvents = async () => {
             try {
                 const response = await fetch('http://localhost:3000/events');
                 const data = await response.json();
                 if (response.ok) {
-                    setEvents(data.data); // Cambiado setUsers a setEvents
+                    setEvents(data.data); // Asegúrate de que 'data' contenga la lista de eventos
                 } else {
                     console.error('Error fetching events:', data.error);
                 }
@@ -27,11 +26,11 @@ export default function EventsTable() {
                 console.error('Error:', error);
             }
         };
-        fetchEvents(); // Cambiado fetchUsers a fetchEvents
+        fetchEvents();
     }, []);
 
     const handleDeleteClick = (id) => {
-        setEventToDelete(id); // Cambiado setUserToDelete a setEventToDelete
+        setEventToDelete(id);
         setIsModalOpen(true);
     };
 
@@ -43,7 +42,7 @@ export default function EventsTable() {
 
             if (response.ok) {
                 alert('Evento eliminado exitosamente');
-                setEvents(events.filter(event => event.id !== eventToDelete)); // Cambiado de users a events
+                setEvents(events.filter(event => event.id !== eventToDelete));
             } else {
                 alert('Error al eliminar el evento');
             }
@@ -54,9 +53,9 @@ export default function EventsTable() {
     };
 
     // Paginación
-    const indexOfLastEvent = currentPage * eventsPerPage; // Cambiado de usersPerPage a eventsPerPage
-    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage; // Cambiado de usersPerPage a eventsPerPage
-    const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent); // Cambiado de users a events
+    const indexOfLastEvent = currentPage * eventsPerPage;
+    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+    const currentEvents = events.slice(indexOfFirstEvent, indexOfLastEvent);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -79,7 +78,7 @@ export default function EventsTable() {
                         <tr className='events-custom-cs' key={event.id}>
                             <td className="border px-4 py-2">{event.id}</td>
                             <td className="border px-4 py-2">{event.name}</td>
-                            <td className="border px-4 py-2">{event.event_date}</td>
+                            <td className="border px-4 py-2">{new Date(event.event_date).toLocaleDateString()}</td> {/* Formateo de fecha */}
                             <td className="border px-4 py-2">{event.location}</td>
                             <td className="border px-4 py-2">{event.description}</td>
                             <td className="border px-4 py-2">
@@ -96,7 +95,7 @@ export default function EventsTable() {
             </table>
             {/* Paginación */}
             <div className="flex justify-center mt-4">
-                {[...Array(Math.ceil(events.length / eventsPerPage))].map((_, index) => ( // Cambiado de users a events
+                {[...Array(Math.ceil(events.length / eventsPerPage))].map((_, index) => (
                     <button key={index} onClick={() => paginate(index + 1)} className={`button-cs mx-1 px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-teal-400 text-white' : 'bg-gray-200'}`}>
                         {index + 1}
                     </button>
@@ -111,4 +110,4 @@ export default function EventsTable() {
             />
         </div>
     );
-};
+}

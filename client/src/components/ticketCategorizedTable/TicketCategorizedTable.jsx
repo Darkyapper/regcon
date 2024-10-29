@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './TicketCategorizedTable.css';
 import { FaQrcode, FaRegTrashAlt } from "react-icons/fa";
-import { IoArrowBackOutline,  IoCloseOutline  } from "react-icons/io5";
+import { IoArrowBackOutline, IoCloseOutline } from "react-icons/io5";
 import ConfirmDeleteModalU from '../confirmDeleteModalU/ConfirmDeleteModalU';
 import { useNavigate, useParams } from 'react-router-dom';
 import QrCodeGenerator from '../qrCodeGenerato/QrCodeGenerato';
@@ -12,7 +12,7 @@ export default function TicketCategorizedTable() {
     const [tickets, setTickets] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [ticketsPerPage] = useState(8);
-    const [modalType, setModalType] = useState(null); // Manage which modal to show
+    const [modalType, setModalType] = useState(null); // Maneja qué modal mostrar
     const [ticketToDelete, setTicketToDelete] = useState(null);
     const [selectedTicketCode, setSelectedTicketCode] = useState(null);
 
@@ -35,7 +35,7 @@ export default function TicketCategorizedTable() {
 
     const handleDeleteClick = (id) => {
         setTicketToDelete(id);
-        setModalType("delete"); // Set modal type to delete
+        setModalType("delete"); // Establecer tipo de modal a eliminar
     };
 
     const confirmDelete = async () => {
@@ -53,7 +53,7 @@ export default function TicketCategorizedTable() {
         } catch (error) {
             console.error('Error:', error);
         }
-        setModalType(null); // Close the modal
+        setModalType(null); // Cerrar el modal
     };
 
     // Paginación
@@ -73,7 +73,7 @@ export default function TicketCategorizedTable() {
 
     const openQrModal = (ticketCode) => {
         setSelectedTicketCode(ticketCode);
-        setModalType("qr"); // Set modal type to QR
+        setModalType("qr"); // Establecer tipo de modal a QR
     };
 
     return (
@@ -145,7 +145,6 @@ export default function TicketCategorizedTable() {
                     </div>
                 </div>
             )}
-    
         </div>
     );
 }

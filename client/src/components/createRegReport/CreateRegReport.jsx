@@ -9,7 +9,7 @@ export default function CreateRegReport() {
     const [author, setAuthor] = useState('');
     const [logo, setLogo] = useState(null);
     const [printDate, setPrintDate] = useState('');
-    const [registrations, setRegistrations] = useState([]); // Cambiar a registros de asistencia
+    const [attendances, setAttendances] = useState([]); // Cambiado a asistencia
     const navigate = useNavigate();
 
     const handleLogoChange = (e) => {
@@ -17,20 +17,20 @@ export default function CreateRegReport() {
     };
 
     useEffect(() => {
-        const fetchRegistrations = async () => {
+        const fetchAttendances = async () => {
             try {
-                const response = await fetch('http://localhost:3000/registrations/details'); // Endpoint para obtener detalles de registros
+                const response = await fetch('http://localhost:3000/attendance-info'); // Endpoint actualizado para obtener detalles de asistencia
                 const data = await response.json();
                 if (response.ok) {
-                    setRegistrations(data.data); // Suponiendo que 'data' contiene la lista de registros
+                    setAttendances(data.data); // Asumiendo que 'data' contiene la lista de asistencias
                 } else {
-                    alert(data.error || 'Error al obtener registros');
+                    alert(data.error || 'Error al obtener asistencias');
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         };
-        fetchRegistrations();
+        fetchAttendances();
     }, []);
 
     const handleSaveAsPDF = () => {
@@ -58,19 +58,19 @@ export default function CreateRegReport() {
     };
 
     const addTableToPDF = (doc) => {
-        // Modificar para que coincida con los datos de 'registrations'
-        const tableData = registrations.map(reg => [
-            reg.registration_id, 
-            reg.user_first_name, 
-            reg.user_last_name, 
-            reg.event_name, 
-            reg.ticket_code, 
-            reg.ticket_name, 
-            reg.ticket_category, 
-            reg.registration_date
+        // Modificar para que coincida con los datos de 'attendances'
+        const tableData = attendances.map(attendance => [
+            attendance.attendance_id, 
+            attendance.user_first_name, 
+            attendance.user_last_name, 
+            attendance.event_name, 
+            attendance.ticket_code, 
+            attendance.ticket_name, 
+            attendance.ticket_category, 
+            attendance.registration_date
         ]);
         autoTable(doc, {
-            head: [['ID Registro', 'Nombre Usuario', 'Apellido Usuario', 'Evento', 'Código Boleto', 'Nombre Boleto', 'Categoría Boleto', 'Fecha de Registro']],
+            head: [['ID Asistencia', 'Nombre Usuario', 'Apellido Usuario', 'Evento', 'Código Boleto', 'Nombre Boleto', 'Categoría Boleto', 'Fecha de Registro']],
             body: tableData,
             startY: 60, // Ajusta la posición de inicio de la tabla
             styles: {

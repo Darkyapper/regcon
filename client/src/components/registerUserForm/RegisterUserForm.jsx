@@ -16,17 +16,18 @@ export default function RegisterUserForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
         try {
             const response = await fetch('http://localhost:3000/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData) // Envía los datos sin la contraseña
             });
             const data = await response.json();
             if (response.ok) {
-                alert('Usuario registrado exitosamente');
+                alert(`Usuario registrado exitosamente. La contraseña temporal es: ${data.message.split(': ')[1]}`); // Muestra la contraseña temporal que devuelve el servidor
                 setFormData({ first_name: '', last_name: '', email: '', phone: '' }); // Reset form
             } else {
                 alert(data.error || 'Error al registrar el usuario');
@@ -35,7 +36,6 @@ export default function RegisterUserForm() {
             console.error('Error:', error);
         }
     };
-
     return (
         <div className="register-user-form p-4 bg-white rounded-lg shadow-md">
             <h2 className="custom-wawa text-lg mb-4">Registrar Nuevo Usuario</h2>

@@ -29,10 +29,10 @@ export default function RegisterTCForm() {
             });
             const data = await response.json();
             if (response.ok) {
-                alert('Categoria de boletos registrada exitosamente');
-                setFormData({ name: '', price: '', description: ''}); // Reset form
+                alert('Categoría de boletos registrada exitosamente');
+                setFormData({ name: '', price: '', description: '' }); // Resetear el formulario
             } else {
-                alert(data.error || 'Error al registrar la categoria de boletos');
+                alert(data.error || 'Error al registrar la categoría de boletos');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -50,7 +50,7 @@ export default function RegisterTCForm() {
                 <button className="button-cs mx-1 px-3 py-2 rounded bg-orange-500 text-white hover:text-black" onClick={handleBackClick}>
                     <IoArrowBackOutline />
                 </button>
-                <h2 className="title-uts text-lg">Editar Categorías de Boletos</h2>
+                <h2 className="title-uts text-lg">Crear Categoría de Boletos</h2>
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -68,7 +68,7 @@ export default function RegisterTCForm() {
                 <div className="mb-4">
                     <label htmlFor="price" className="block text-sm font-medium text-gray-700">Costo</label>
                     <input
-                        type="text"
+                        type="number" // Cambiado a type="number"
                         id="price"
                         name="price"
                         value={formData.price}
@@ -80,7 +80,7 @@ export default function RegisterTCForm() {
                 <div className="mb-4">
                     <label htmlFor="description" className="block text-sm font-medium text-gray-700">Descripción breve de la categoría</label>
                     <input
-                        type="description"
+                        type="text" // Cambiado a type="text"
                         id="description"
                         name="description"
                         value={formData.description}

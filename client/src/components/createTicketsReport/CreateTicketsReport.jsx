@@ -19,7 +19,7 @@ export default function CreateTicketsReport() {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const response = await fetch('http://localhost:3000/ticket-view');
+                const response = await fetch('http://localhost:3000/ticket-view'); // Asegúrate de que la URL sea correcta
                 const data = await response.json();
                 if (response.ok) {
                     setTickets(data.data); // Actualizar para obtener la información de los boletos

@@ -11,8 +11,10 @@ export default function EditEventForm() {
         name: '',
         event_date: '',
         location: '',
-        description: ''
+        description: '',
+        category_id: '' // Nuevo campo para la categoría de boleto
     });
+    const [categories, setCategories] = useState([]); // Estado para las categorías de boletos
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isFormDirty, setIsFormDirty] = useState(false); // Track if form data is modified
 
@@ -30,7 +32,23 @@ export default function EditEventForm() {
                 console.error('Error:', error);
             }
         };
+
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/ticket-categories'); // Obtener categorías de boletos
+                const data = await response.json();
+                if (response.ok) {
+                    setCategories(data.data); // Suponiendo que 'data' contiene la lista de categorías
+                } else {
+                    alert(data.error || 'Error al obtener categorías de boletos');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
         fetchEvent();
+        fetchCategories(); // Llamar a la función para obtener categorías
     }, [id]);
 
     const handleChange = (e) => {
@@ -110,7 +128,7 @@ export default function EditEventForm() {
                 <div className="mb-4">
                     <label htmlFor="location" className="block text-sm font-medium text-gray-700">Ubicación</label>
                     <input
-                        type="location"
+                        type="text"
                         id="location"
                         name="location"
                         value={formData.location}
@@ -129,6 +147,22 @@ export default function EditEventForm() {
                         onChange={handleChange}
                         className="mt-1 block w-full border rounded-md p-2"
                     />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="category_id" className="block text-sm font-medium text-gray-700">Categoría de Boleto</label>
+                    <select
+                        id="category_id"
+                        name="category_id"
+                        value={formData.category_id}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border rounded-md p-2"
+                    >
+                        <option value="">Seleccione una categoría</option>
+                        {categories.map(category => (
+                            <option key={category.id} value={category.id}>{category.name}</option>
+                        ))}
+                    </select>
                 </div>
                 <button
                     type="submit"

@@ -1,18 +1,20 @@
 const express = require('express');
-const cors = require('cors'); 
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const cors = require('cors');
+const { Pool } = require('pg');
 const multer = require('multer');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const saltRounds = 10;
 
+// Configuración de Multer para carga de archivos
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // La carpeta donde se guardarán los archivos subidos
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`); // Renombrar el archivo
+        cb(null, `${Date.now()}-${file.originalname}`);
     }
 });
 
@@ -21,637 +23,452 @@ const upload = multer({ storage });
 app.use(cors());
 app.use(express.json());
 
-const dbPath = path.resolve(__dirname, './data/database.db');
-const db = new sqlite3.Database(dbPath, (err) => {
+// Configuración de conexión a Supabase PostgreSQL
+const pool = new Pool({
+    host: 'aws-0-us-west-1.pooler.supabase.com',
+    user: 'postgres.vfwkmxsgdsnpdtebeize',
+    password: 'R4dI@-JKdaNCE',
+    database: 'postgres',
+    port: 6543,
+    ssl: { rejectUnauthorized: false }
+});
+
+async function query(sql, params = []) {
+    const client = await pool.connect();
+    try {
+        const result = await client.query(sql, params);
+        return result.rows;
+    } finally {
+        client.release();
+    }
+}
+
+// Verifica la conexión a la base de datos
+pool.connect((err) => {
     if (err) {
-        console.error('Error al conectar con la base de datos:', err.message);
+        console.error('Error al conectar con la base de datos de Supabase:', err.message);
     } else {
-        console.log('Conectado a la base de datos SQLite.');
+        console.log('Conectado a la base de datos de Supabase PostgreSQL.');
     }
 });
 
+// Cerrar la conexión cuando se detiene el proceso
 process.on('SIGINT', () => {
-    db.close((err) => {
-        if (err) {
-            console.error('Error al cerrar la base de datos:', err.message);
-        }
-        console.log('Conexión a SQLite cerrada.');
-        process.exit(0);s
+    pool.end(() => {
+        console.log('Conexión a PostgreSQL cerrada.');
+        process.exit(0);
     });
 });
+
+const generateTempPassword = () => {
+    const length = 12;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let tempPassword = "";
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        tempPassword += charset[randomIndex];
+    }
+    return tempPassword;
+};
 
 // Enpoints para usuarios
-app.get('/users', (req, res) => {
-    const sql = 'SELECT * FROM Users';
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
+app.get('/users', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM Users');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.get('/users/:id', (req, res) => {
-    const { id } = req.params;
-
-    const sql = 'SELECT * FROM Users WHERE id = ?';
-    const params = [id];
-
-    db.get(sql, params, (err, row) => {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (!row) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.json({
-            message: 'Success',
-            data: row
-        });
-    });
+app.get('/users/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const rows = await query('SELECT * FROM Users WHERE id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'User not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
     const { first_name, last_name, email, phone } = req.body;
-    const sql = 'INSERT INTO Users (first_name, last_name, email, phone) VALUES (?, ?, ?, ?)';
-    const params = [first_name, last_name, email, phone];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        res.json({
-            message: 'User created successfully',
-            data: {
-                id: this.lastID,
-                first_name,
-                last_name,
-                email,
-                phone
-            }
-        });
-    });
-});
-
-app.put('/users/:id', (req, res) => {
-    const { first_name, last_name, email, phone } = req.body;
-    const { id } = req.params;
-
-    const sql = `
-        UPDATE Users
-        SET first_name = ?, last_name = ?, email = ?, phone = ?
-        WHERE id = ?
-    `;
-    const params = [first_name, last_name, email, phone, id];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.json({
-            message: 'User updated successfully',
-            data: { id, first_name, last_name, email, phone }
-        });
-    });
-});
-
-app.delete('/users/:id', (req, res) => {
-    const { id } = req.params;
-
-    const sql = 'DELETE FROM Users WHERE id = ?';
-
-    db.run(sql, id, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        res.json({
-            message: 'User deleted successfully',
-            data: { id }
-        });
-    });
-});
-
-// Endpoints para eventos
-app.post('/events', (req, res) => {
-    const { name, event_date, location, description } = req.body;
-    const sql = 'INSERT INTO Events (name, event_date, location, description) VALUES (?, ?, ?, ?)';
-    const params = [name, event_date, location, description];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        res.json({
-            message: 'Event created successfully',
-            data: {
-                id: this.lastID,
-                name,
-                event_date,
-                location,
-                description
-            }
-        });
-    });
-});
-
-app.get('/events', (req, res) => {
-    const sql = 'SELECT * FROM Events';
     
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
-});
-
-app.get('/events/:id', (req, res) => {
-    const { id } = req.params;
-
-    const sql = 'SELECT * FROM Events WHERE id = ?';
-    const params = [id];
-
-    db.get(sql, params, (err, row) => {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (!row) {
-            return res.status(404).json({ message: 'Event not found' });
-        }
-        res.json({
-            message: 'Success',
-            data: row
-        });
-    });
-});
-
-app.put('/events/:id', (req, res) => {
-    const { name, event_date, location, description } = req.body;
-    const { id } = req.params;
-
-    const sql = `
-        UPDATE Events
-        SET name = ?, event_date = ?, location = ?, description = ?
-        WHERE id = ?
-    `;
-    const params = [name, event_date, location, description, id];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'Event not found' });
-        }
-        res.json({
-            message: 'Event updated successfully',
-            data: { id, name, event_date, location, description }
-        });
-    });
-});
-
-app.delete('/events/:id', (req, res) => {
-    const { id } = req.params;
-
-    const sql = 'DELETE FROM Events WHERE id = ?';
-
-    db.run(sql, id, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'Event not found' });
-        }
-        res.json({
-            message: 'Event deleted successfully',
-            data: { id }
-        });
-    });
-});
-
-// Endpoints para categorías de boletos
-app.post('/ticket-categories', (req, res) => {
-    const { name, price, description } = req.body;
-    const sql = 'INSERT INTO TicketCategories (name, price, description) VALUES (?, ?, ?)';
-    const params = [name, price, description];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        res.json({
-            message: 'Ticket category created successfully',
-            data: {
-                id: this.lastID,
-                name,
-                price,
-                description
-            }
-        });
-    });
-});
-
-app.get('/ticket-categories', (req, res) => {
-    const sql = 'SELECT * FROM TicketCategories';
+    // Generar una contraseña temporal
+    const tempPassword = generateTempPassword(); 
+    // Encriptar la contraseña antes de guardarla
+    const hashedPassword = await bcrypt.hash(tempPassword, saltRounds);
     
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
+    try {
+        const rows = await query(
+            'INSERT INTO Users (first_name, last_name, email, phone, password) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [first_name, last_name, email, phone, hashedPassword]
+        );
+        res.json({ message: 'Usuario registrado exitosamente. La contraseña temporal es: ' + tempPassword, data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-app.get('/ticket-categories/:id', (req, res) => {
+app.put('/users/:id', async (req, res) => {
+    const { first_name, last_name, email, phone, password } = req.body;
     const { id } = req.params;
 
-    const sql = 'SELECT * FROM TicketCategories WHERE id = ?';
-    const params = [id];
+    try {
+        // Si se proporciona una nueva contraseña, encríptala
+        let hashedPassword;
+        if (password) {
+            hashedPassword = await bcrypt.hash(password, saltRounds);
+        }
 
-    db.get(sql, params, (err, row) => {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (!row) {
-            return res.status(404).json({ message: 'Ticket category not found' });
-        }
-        res.json({
-            message: 'Success',
-            data: row
-        });
-    });
+        const rows = await query(
+            `UPDATE Users SET first_name = $1, last_name = $2, email = $3, phone = $4, password = $5 WHERE id = $6 RETURNING *`,
+            [first_name, last_name, email, phone, hashedPassword || null, id] // Si no hay nueva contraseña, se establece como null
+        );
+
+        if (rows.length === 0) return res.status(404).json({ message: 'User not found' });
+        res.json({ message: 'User updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-app.put('/ticket-categories/:id', (req, res) => {
-    const { name, price, description } = req.body;
+app.delete('/users/:id', async (req, res) => {
     const { id } = req.params;
-
-    const sql = `
-        UPDATE TicketCategories
-        SET name = ?, price = ?, description = ?
-        WHERE id = ?
-    `;
-    const params = [name, price, description, id];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'Ticket category not found' });
-        }
-        res.json({
-            message: 'Ticket category updated successfully',
-            data: { id, name, price, description }
-        });
-    });
+    try {
+        const rows = await query('DELETE FROM Users WHERE id = $1 RETURNING id', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'User not found' });
+        res.json({ message: 'User deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-app.delete('/ticket-categories/:id', (req, res) => {
+// Endpoints para Eventos
+app.post('/events', async (req, res) => {
+    const { name, event_date, location, description, category_id, workgroup_id } = req.body;
+    try {
+        const rows = await query(
+            'INSERT INTO Events (name, event_date, location, description, category_id, workgroup_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [name, event_date, location, description, category_id, workgroup_id]
+        );
+        res.json({ message: 'Event created successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.get('/events', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM Events');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/events/:id', async (req, res) => {
     const { id } = req.params;
-
-    const sql = 'DELETE FROM TicketCategories WHERE id = ?';
-
-    db.run(sql, id, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'Ticket category not found' });
-        }
-        res.json({
-            message: 'Ticket category deleted successfully',
-            data: { id }
-        });
-    });
+    try {
+        const rows = await query('SELECT * FROM Events WHERE id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Event not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
+
+app.put('/events/:id', async (req, res) => {
+    const { name, event_date, location, description, category_id, workgroup_id } = req.body;
+    const { id } = req.params;
+    try {
+        const rows = await query(
+            `UPDATE Events SET name = $1, event_date = $2, location = $3, description = $4, category_id = $5, workgroup_id = $6 WHERE id = $7 RETURNING *`,
+            [name, event_date, location, description, category_id, workgroup_id, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Event not found' });
+        res.json({ message: 'Event updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete('/events/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('DELETE FROM Events WHERE id = $1 RETURNING id', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Event not found' });
+        res.json({ message: 'Event deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Endpoints para TicketCategories
+app.post('/ticket-categories', async (req, res) => {
+    const { name, price, description, workgroup_id } = req.body;
+    try {
+        const rows = await query(
+            'INSERT INTO TicketCategories (name, price, description, workgroup_id) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name, price, description, workgroup_id]
+        );
+        res.json({ message: 'Ticket category created successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.get('/ticket-categories', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM TicketCategories');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/ticket-categories/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('SELECT * FROM TicketCategories WHERE id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket category not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.put('/ticket-categories/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, price, description, workgroup_id } = req.body;
+    try {
+        const rows = await query(
+            `UPDATE TicketCategories SET name = $1, price = $2, description = $3, workgroup_id = $4 WHERE id = $5 RETURNING *`,
+            [name, price, description, workgroup_id, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket category not found' });
+        res.json({ message: 'Ticket category updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete('/ticket-categories/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('DELETE FROM TicketCategories WHERE id = $1 RETURNING id', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket category not found' });
+        res.json({ message: 'Ticket category deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 
 // Endpoints para boletos
-app.post('/tickets', (req, res) => {
-    const { code, name, category_id, status } = req.body;
-    const sql = 'INSERT INTO Tickets (code, name, category_id, status) VALUES (?, ?, ?, ?)';
-    const params = [code, name, category_id, status];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        res.json({
-            message: 'Ticket created successfully',
-            data: {
-                code,
-                name,
-                category_id,
-                status
-            }
-        });
-    });
+app.get('/tickets', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM Tickets');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.get('/tickets', (req, res) => {
-    const sql = 'SELECT * FROM Tickets';
-    
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
-});
-
-app.get('/tickets/:code', (req, res) => {
+app.get('/tickets/:code', async (req, res) => {
     const { code } = req.params;
-
-    const sql = 'SELECT * FROM Tickets WHERE code = ?';
-    const params = [code];
-
-    db.get(sql, params, (err, row) => {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (!row) {
-            return res.status(404).json({ message: 'Ticket not found' });
-        }
-        res.json({
-            message: 'Success',
-            data: row
-        });
-    });
+    try {
+        const rows = await query('SELECT * FROM Tickets WHERE code = $1', [code]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.put('/tickets/:code', (req, res) => {
-    const { name, category_id, status } = req.body;
+app.post('/tickets', async (req, res) => {
+    const { code, name, category_id, status, workgroup_id } = req.body;
+    try {
+        const rows = await query(
+            'INSERT INTO Tickets (code, name, category_id, status, workgroup_id) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [code, name, category_id, status, workgroup_id]
+        );
+        res.json({ message: 'Ticket created successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.put('/tickets/:code', async (req, res) => {
     const { code } = req.params;
-
-    const sql = `
-        UPDATE Tickets
-        SET name = ?, category_id = ?, status = ?
-        WHERE code = ?
-    `;
-    const params = [name, category_id, status, code];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'Ticket not found' });
-        }
-        res.json({
-            message: 'Ticket updated successfully',
-            data: { code, name, category_id, status }
-        });
-    });
+    const { name, category_id, status, workgroup_id } = req.body;
+    try {
+        const rows = await query(
+            `UPDATE Tickets SET name = $1, category_id = $2, status = $3, workgroup_id = $4 WHERE code = $5 RETURNING *`,
+            [name, category_id, status, workgroup_id, code]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket not found' });
+        res.json({ message: 'Ticket updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-app.delete('/tickets/:code', (req, res) => {
+app.delete('/tickets/:code', async (req, res) => {
     const { code } = req.params;
-
-    const sql = 'DELETE FROM Tickets WHERE code = ?';
-
-    db.run(sql, code, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'Ticket not found' });
-        }
-        res.json({
-            message: 'Ticket deleted successfully',
-            data: { code }
-        });
-    });
+    try {
+        const rows = await query('DELETE FROM Tickets WHERE code = $1 RETURNING code', [code]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket not found' });
+        res.json({ message: 'Ticket deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-// Endpoint para tener Boleto y sus categorias
-app.get('/ticket-with-counts', async (req, res) => {
-    const sql = 'SELECT * FROM TicketCategoriesWithCounts';
-    
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
-});
-app.get('/tickets/category/:category_id', async (req, res) => {
-    const { category_id } = req.params; // Obtiene el category_id de la URL
-    const sql = 'SELECT * FROM Tickets WHERE category_id = ?'; // Filtra por category_id
-
-    db.all(sql, [category_id], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
-});
 
 // Endpoint para tener los boletos con su información completa
-app.get('/ticket-view', (req, res) => {
-    const sql = 'SELECT * FROM TicketFullInfo';
-    
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
+app.get('/ticket-view', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM TicketFullInfo');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.get('/ticket-view/:code', (req, res) => {
+app.get('/ticket-view/:code', async (req, res) => {
     const { code } = req.params;
-    const sql = 'SELECT * FROM TicketFullInfo WHERE code = ?';
-    const params = [code];
-
-    db.get(sql, params, (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (!row) {
-            return res.status(404).json({ message: 'Ticket not found' });
-        }
-        res.json({
-            message: 'Success',
-            data: row
-        });
-    });
+    try {
+        const rows = await query('SELECT * FROM TicketFullInfo WHERE code = $1', [code]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-
-// Endpoints para registros
-app.get('/registro', (req, res) => {
-    const sql = 'SELECT * FROM Registration';
-    
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
+// Endpoints para registros (Attendance en lugar de Registration)
+app.get('/attendance', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM Attendance');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.get('/registro/:id', (req, res) => {
+app.get('/attendance/:id', async (req, res) => {
     const { id } = req.params;
-    const sql = 'SELECT * FROM Registration WHERE id = ?';
-    const params = [id];
-
-    db.get(sql, params, (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (!row) {
-            return res.status(404).json({ message: 'Registration not found' });
-        }
-        res.json({
-            message: 'Success',
-            data: row
-        });
-    });
+    try {
+        const rows = await query('SELECT * FROM Attendance WHERE id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Attendance not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.post('/registro', (req, res) => {
-    const { user_id, event_id, ticket_code } = req.body;
-
-    // Primero, verifica el estado del boleto
-    const sqlCheckTicket = 'SELECT status FROM Tickets WHERE code = ?';
-    db.get(sqlCheckTicket, [ticket_code], (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (!row || row.status !== 'Sin Usar') {
+app.post('/attendance', async (req, res) => {
+    const { user_id, event_id, ticket_code, workgroup_id } = req.body;
+    try {
+        // Verificar el estado del boleto
+        const ticketRows = await query('SELECT status FROM Tickets WHERE code = $1', [ticket_code]);
+        if (ticketRows.length === 0 || ticketRows[0].status !== 'Sin Usar') {
             return res.status(400).json({ error: 'Este boleto es inválido o ya ha sido usado.' });
         }
 
-        // Si el boleto es válido, proceder con la inserción
-        const sql = 'INSERT INTO Registration (user_id, event_id, ticket_code) VALUES (?, ?, ?)';
-        const params = [user_id, event_id, ticket_code];
-
-        db.run(sql, params, function(err) {
-            if (err) {
-                return res.status(400).json({ error: err.message });
-            }
-            res.json({
-                message: 'Registration created successfully',
-                data: {
-                    id: this.lastID,
-                    user_id,
-                    event_id,
-                    ticket_code,
-                    registration_date: new Date().toISOString() // Fecha de registro actual
-                }
-            });
-        });
-    });
+        // Crear el registro de asistencia
+        const rows = await query(
+            'INSERT INTO Attendance (user_id, event_id, ticket_code, workgroup_id) VALUES ($1, $2, $3, $4) RETURNING *',
+            [user_id, event_id, ticket_code, workgroup_id]
+        );
+        res.json({ message: 'Attendance created successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-app.put('/registro/:id', (req, res) => {
-    const { user_id, event_id, ticket_code } = req.body;
+app.put('/attendance/:id', async (req, res) => {
+    const { user_id, event_id, ticket_code, workgroup_id } = req.body;
     const { id } = req.params;
-
-    const sql = `
-        UPDATE Registration
-        SET user_id = ?, event_id = ?, ticket_code = ?
-        WHERE id = ?
-    `;
-    const params = [user_id, event_id, ticket_code, id];
-
-    db.run(sql, params, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'Registration not found' });
-        }
-        res.json({
-            message: 'Registration updated successfully',
-            data: { id, user_id, event_id, ticket_code }
-        });
-    });
+    try {
+        const rows = await query(
+            `UPDATE Attendance SET user_id = $1, event_id = $2, ticket_code = $3, workgroup_id = $4 WHERE id = $5 RETURNING *`,
+            [user_id, event_id, ticket_code, workgroup_id, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Attendance not found' });
+        res.json({ message: 'Attendance updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-app.delete('/registro/:id', (req, res) => {
+app.delete('/attendance/:id', async (req, res) => {
     const { id } = req.params;
-
-    const sql = 'DELETE FROM Registration WHERE id = ?';
-
-    db.run(sql, id, function(err) {
-        if (err) {
-            return res.status(400).json({ error: err.message });
-        }
-        if (this.changes === 0) {
-            return res.status(404).json({ message: 'Registration not found' });
-        }
-        res.json({
-            message: 'Registration deleted successfully',
-            data: { id }
-        });
-    });
+    try {
+        const rows = await query('DELETE FROM Attendance WHERE id = $1 RETURNING id', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Attendance not found' });
+        res.json({ message: 'Attendance deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
 });
 
-// Endpoint para tener los registros con su información completa
-app.get('/registrations/details', (req, res) => {
-    const sql = 'SELECT * FROM RegistrationDetails';
-    
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({
-            message: 'Success',
-            data: rows
-        });
-    });
+// Endpoint para obtener los registros con información completa (AttendanceDetails en lugar de RegistrationDetails)
+app.get('/attendance-info', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM AttendanceDetails');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.get('/registrations/details/:id', (req, res) => {
+app.get('/attendance-info/:id', async (req, res) => {
     const { id } = req.params;
-    const sql = 'SELECT * FROM RegistrationDetails WHERE registration_id = ?';
-    const params = [id];
-
-    db.get(sql, params, (err, row) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        if (!row) {
-            return res.status(404).json({ message: 'Registration not found' });
-        }
-        res.json({
-            message: 'Success',
-            data: row
-        });
-    });
+    try {
+        const rows = await query('SELECT * FROM AttendanceDetails WHERE attendance_id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Attendance not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
+
+// enpoint para obtener las categorías de boletos con sus respectivos conteos
+app.get('/ticket-categories-with-counts', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM TicketCategoriesWithCounts');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/ticket-categories-with-counts/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('SELECT * FROM TicketCategoriesWithCounts WHERE id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket category not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Obtener todos los boletos de una categoría específica
+app.get('/tickets/category/:category_id', async (req, res) => {
+    const { category_id } = req.params;
+    try {
+        const rows = await query('SELECT * FROM Tickets WHERE category_id = $1', [category_id]);
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });

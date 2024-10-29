@@ -4,7 +4,6 @@ import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 import ConfirmDeleteModalU from '../confirmDeleteModalU/ConfirmDeleteModalU';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function UsersTable() {
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
@@ -16,10 +15,10 @@ export default function UsersTable() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await fetch('http://localhost:3000/users');
+                const response = await fetch('http://localhost:3000/users'); // Asegúrate de que este endpoint esté funcionando
                 const data = await response.json();
                 if (response.ok) {
-                    setUsers(data.data); // Suponiendo que 'data' contiene la lista de usuarios
+                    setUsers(data.data); // Asegúrate de que 'data' contenga la lista de usuarios
                 } else {
                     console.error('Error fetching users:', data.error);
                 }
@@ -83,12 +82,18 @@ export default function UsersTable() {
                             <td className="border px-4 py-2">{user.last_name}</td>
                             <td className="border px-4 py-2">{user.email}</td>
                             <td className="border px-4 py-2">{user.phone}</td>
-                            <td className="border px-4 py-2">{user.registration_date}</td>
+                            <td className="border px-4 py-2">{new Date(user.registration_date).toLocaleString()}</td> {/* Formatea la fecha */}
                             <td className="border px-4 py-2">
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/users/edit/${user.id}`)}>
+                                <button 
+                                    className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" 
+                                    onClick={() => navigate(`/users/edit/${user.id}`)}
+                                >
                                     <FaEdit />
                                 </button>
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(user.id)}>
+                                <button 
+                                    className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" 
+                                    onClick={() => handleDeleteClick(user.id)}
+                                >
                                     <FaRegTrashAlt />
                                 </button>
                             </td>
@@ -99,7 +104,11 @@ export default function UsersTable() {
             {/* Paginación */}
             <div className="flex justify-center mt-4">
                 {[...Array(Math.ceil(users.length / usersPerPage))].map((_, index) => (
-                    <button key={index} onClick={() => paginate(index + 1)} className={`button-cs mx-1 px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-teal-400 text-white' : 'bg-gray-200'}`}>
+                    <button 
+                        key={index} 
+                        onClick={() => paginate(index + 1)} 
+                        className={`button-cs mx-1 px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-teal-400 text-white' : 'bg-gray-200'}`}
+                    >
                         {index + 1}
                     </button>
                 ))}
@@ -113,4 +122,4 @@ export default function UsersTable() {
             />
         </div>
     );
-};
+}

@@ -6,43 +6,43 @@ import { useNavigate } from 'react-router-dom';
 
 export default function RegisterTable() {
     const navigate = useNavigate();
-    const [registrations, setRegistrations] = useState([]);
+    const [attendances, setAttendances] = useState([]); // Cambiado a attendances
     const [currentPage, setCurrentPage] = useState(1);
-    const [registrationsPerPage] = useState(15);
+    const [attendancesPerPage] = useState(15);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [registrationToDelete, setRegistrationToDelete] = useState(null);
+    const [attendanceToDelete, setAttendanceToDelete] = useState(null); // Cambiado a attendanceToDelete
 
     useEffect(() => {
-        const fetchRegistrations = async () => {
+        const fetchAttendances = async () => {
             try {
-                const response = await fetch('http://localhost:3000/registrations/details');
+                const response = await fetch('http://localhost:3000/attendance-info'); // Endpoint actualizado
                 const data = await response.json();
                 if (response.ok) {
-                    setRegistrations(data.data); // Suponiendo que 'data' contiene la lista de registros
+                    setAttendances(data.data); // Suponiendo que 'data' contiene la lista de registros
                 } else {
-                    console.error('Error fetching registrations:', data.error);
+                    console.error('Error fetching attendances:', data.error);
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         };
-        fetchRegistrations();
+        fetchAttendances();
     }, []);
 
     const handleDeleteClick = (id) => {
-        setRegistrationToDelete(id);
+        setAttendanceToDelete(id); // Cambiado a attendanceToDelete
         setIsModalOpen(true);
     };
 
     const confirmDelete = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/registro/${registrationToDelete}`, {
+            const response = await fetch(`http://localhost:3000/attendance/${attendanceToDelete}`, { // Endpoint actualizado
                 method: 'DELETE',
             });
 
             if (response.ok) {
                 alert('Registro eliminado exitosamente');
-                setRegistrations(registrations.filter(registration => registration.registration_id !== registrationToDelete));
+                setAttendances(attendances.filter(attendance => attendance.registration_id !== attendanceToDelete)); // Cambiado a attendance
             } else {
                 alert('Error al eliminar el registro');
             }
@@ -53,9 +53,9 @@ export default function RegisterTable() {
     };
 
     // Paginación
-    const indexOfLastRegistration = currentPage * registrationsPerPage;
-    const indexOfFirstRegistration = indexOfLastRegistration - registrationsPerPage;
-    const currentRegistrations = registrations.slice(indexOfFirstRegistration, indexOfLastRegistration);
+    const indexOfLastAttendance = currentPage * attendancesPerPage;
+    const indexOfFirstAttendance = indexOfLastAttendance - attendancesPerPage;
+    const currentAttendances = attendances.slice(indexOfFirstAttendance, indexOfLastAttendance);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -77,21 +77,21 @@ export default function RegisterTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentRegistrations.map(registration => (
-                        <tr key={registration.registration_id}>
-                            <td className="border px-4 py-2">{registration.registration_id}</td>
-                            <td className="border px-4 py-2">{registration.user_first_name}</td>
-                            <td className="border px-4 py-2">{registration.user_last_name}</td>
-                            <td className="border px-4 py-2">{registration.event_name}</td>
-                            <td className="border px-4 py-2">{registration.ticket_code}</td>
-                            <td className="border px-4 py-2">{registration.ticket_name}</td>
-                            <td className="border px-4 py-2">{registration.ticket_category}</td>
-                            <td className="border px-4 py-2">{registration.registration_date}</td>
+                    {currentAttendances.map(attendance => (
+                        <tr key={attendance.attendance_id}>
+                            <td className="border px-4 py-2">{attendance.attendance_id}</td>
+                            <td className="border px-4 py-2">{attendance.user_first_name}</td>
+                            <td className="border px-4 py-2">{attendance.user_last_name}</td>
+                            <td className="border px-4 py-2">{attendance.event_name}</td>
+                            <td className="border px-4 py-2">{attendance.ticket_code}</td>
+                            <td className="border px-4 py-2">{attendance.ticket_name}</td>
+                            <td className="border px-4 py-2">{attendance.ticket_category}</td>
+                            <td className="border px-4 py-2">{attendance.registration_date}</td>
                             <td className="border px-4 py-2">
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/register/edit/${registration.registration_id}`)}>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/register/edit/${attendance.attendance_id}`)}>
                                     <FaEdit />
                                 </button>
-                                <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(registration.registration_id)}>
+                                <button className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" onClick={() => handleDeleteClick(attendance.attendance_id)}>
                                     <FaRegTrashAlt />
                                 </button>
                             </td>
@@ -101,7 +101,7 @@ export default function RegisterTable() {
             </table>
             {/* Paginación */}
             <div className="flex justify-center mt-4">
-                {[...Array(Math.ceil(registrations.length / registrationsPerPage))].map((_, index) => (
+                {[...Array(Math.ceil(attendances.length / attendancesPerPage))].map((_, index) => (
                     <button key={index} onClick={() => paginate(index + 1)} className={`button-cs mx-1 px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-teal-400 text-white' : 'bg-gray-200'}`}>
                         {index + 1}
                     </button>
@@ -116,4 +116,4 @@ export default function RegisterTable() {
             />
         </div>
     );
-};
+}

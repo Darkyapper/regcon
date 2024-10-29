@@ -15,10 +15,10 @@ export default function TicketsTable() {
     useEffect(() => {
         const fetchTicketCategories = async () => {
             try {
-                const response = await fetch('http://localhost:3000/ticket-with-counts');
+                const response = await fetch('http://localhost:3000/ticket-categories-with-counts'); // Endpoint que devuelve categorías de boletos con conteo
                 const data = await response.json();
                 if (response.ok) {
-                    setTicketCategories(data.data);
+                    setTicketCategories(data.data); // Cargar categorías de boletos
                 } else {
                     console.error('Error fetching ticket categories:', data.error);
                 }
@@ -53,7 +53,7 @@ export default function TicketsTable() {
     };
 
     const handleValidate = () => {
-        navigate('/tickets/validate');
+        navigate('/tickets/validate'); // Navegar a la página de validación de boletos
     };  
 
     // Paginación

@@ -81,7 +81,7 @@ export default function EditTCForm() {
                 <button className="button-cs mx-1 px-3 py-2 rounded bg-orange-500 text-white hover:text-black" onClick={handleBackClick}>
                     <IoArrowBackOutline />
                 </button>
-                <h2 className="title-uts text-lg">Editar Categorías de Boletos</h2>
+                <h2 className="title-uts text-lg">Editar Categoría de Boletos</h2>
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
@@ -99,7 +99,7 @@ export default function EditTCForm() {
                 <div className="mb-4">
                     <label htmlFor="price" className="block text-sm font-medium text-gray-700">Costo</label>
                     <input
-                        type="text"
+                        type="number" // Cambiado a type="number" para asegurar que sea un número
                         id="price"
                         name="price"
                         value={formData.price}
@@ -111,7 +111,7 @@ export default function EditTCForm() {
                 <div className="mb-4">
                     <label htmlFor="description" className="block text-sm font-medium text-gray-700">Descripción breve de la categoría</label>
                     <input
-                        type="text" // Cambia "description" a "text" para el tipo de input
+                        type="text"
                         id="description"
                         name="description"
                         value={formData.description}

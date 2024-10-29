@@ -6,7 +6,7 @@ import ErrorModal from '../errorModal/ErrorModal';
 import { IoArrowBackOutline } from "react-icons/io5"; // Importa el icono para el botón de volver
 
 export default function EditRegForm() {
-    const { id } = useParams();
+    const { id } = useParams(); // Obtiene el ID del registro
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         user_id: '',
@@ -23,7 +23,7 @@ export default function EditRegForm() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/registro/${id}`); // Endpoint para obtener registro por ID
+                const response = await fetch(`http://localhost:3000/attendance/${id}`); // Cambiado al nuevo endpoint
                 const data = await response.json();
                 if (response.ok) {
                     setFormData(data.data);
@@ -77,7 +77,7 @@ export default function EditRegForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:3000/registro/${id}`, {
+            const response = await fetch(`http://localhost:3000/attendance/${id}`, { // Cambiado al nuevo endpoint
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -113,7 +113,6 @@ export default function EditRegForm() {
     };
 
     const handleBackClick = () => {
-        // Implementar navegación sin cambios
         navigate('/register'); // Navega a la página de registros sin preguntar
     };
 

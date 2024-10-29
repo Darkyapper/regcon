@@ -22,7 +22,7 @@ export default function CreateReportForm() {
                 const response = await fetch('http://localhost:3000/users');
                 const data = await response.json();
                 if (response.ok) {
-                    setUsers(data.data);
+                    setUsers(data.data); // Suponiendo que 'data' contiene la lista de usuarios
                 } else {
                     alert(data.error || 'Error al obtener usuarios');
                 }
@@ -58,7 +58,16 @@ export default function CreateReportForm() {
     };
 
     const addTableToPDF = (doc) => {
-        const tableData = users.map(user => [user.id, user.first_name, user.last_name, user.email, user.phone, user.registration_date]);
+        // Asegúrate de que registration_date sea un formato válido
+        const tableData = users.map(user => [
+            user.id, 
+            user.first_name, 
+            user.last_name, 
+            user.email, 
+            user.phone, 
+            new Date(user.registration_date).toLocaleString() // Formatear la fecha
+        ]);
+
         autoTable(doc, {
             head: [['ID', 'Nombre', 'Apellido', 'Correo', 'Teléfono', 'Fecha de Registro']],
             body: tableData,
@@ -71,7 +80,7 @@ export default function CreateReportForm() {
                 valign: 'middle',
             },
         });
-        doc.save('informe_usuarios.pdf');
+        doc.save('informe_usuarios.pdf'); // Cambia el nombre del archivo si es necesario
     };
 
     return (

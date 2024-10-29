@@ -79,7 +79,7 @@ export default function RegisterForm() {
         const isValidTicket = await handleTicketValidation();
         if (isValidTicket) {
             try {
-                const response = await fetch('http://localhost:3000/registro', {
+                const response = await fetch('http://localhost:3000/attendance', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -102,11 +102,6 @@ export default function RegisterForm() {
 
     const handleAddUser = () => {
         navigate('/users/add');
-    };
-
-    const goToAdeministrarCategorias = (e) => {
-        e.preventDefault(); // Prevenir el comportamiento por defecto
-        navigate('/ticket-categories');
     };
 
     const handleCodeDetected = (code) => {

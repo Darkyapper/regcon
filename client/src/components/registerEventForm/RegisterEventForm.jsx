@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './RegisterEventForm.css';
 
 export default function RegisterEventForm() {
@@ -6,8 +6,28 @@ export default function RegisterEventForm() {
         name: '',
         event_date: '',
         location: '',
-        description: ''
+        description: '',
+        category_id: '' // Cambiado a category_id
     });
+
+    const [categories, setCategories] = useState([]); // Estado para las categorías de boletos
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/ticket-categories'); // Endpoint para obtener categorías de boletos
+                const data = await response.json();
+                if (response.ok) {
+                    setCategories(data.data); // Suponiendo que 'data' contiene la lista de categorías
+                } else {
+                    alert(data.error || 'Error al obtener categorías de boletos');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,7 +47,7 @@ export default function RegisterEventForm() {
             const data = await response.json();
             if (response.ok) {
                 alert('Evento creado exitosamente');
-                setFormData({ name: '', event_date: '', location: '', description: '' }); // Reset form
+                setFormData({ name: '', event_date: '', location: '', description: '', category_id: '' }); // Reset form
             } else {
                 alert(data.error || 'Error al crear el evento');
             }
@@ -67,7 +87,7 @@ export default function RegisterEventForm() {
                 <div className="mb-4">
                     <label htmlFor="location" className="block text-sm font-medium text-gray-700">Ubicación</label>
                     <input
-                        type="location"
+                        type="text"
                         id="location"
                         name="location"
                         value={formData.location}
@@ -86,6 +106,22 @@ export default function RegisterEventForm() {
                         onChange={handleChange}
                         className="mt-1 block w-full border rounded-md p-2"
                     />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="category_id" className="block text-sm font-medium text-gray-700">Categoría de Boleto</label>
+                    <select
+                        id="category_id"
+                        name="category_id"
+                        value={formData.category_id}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border rounded-md p-2"
+                    >
+                        <option value="">Seleccione una categoría</option>
+                        {categories.map(category => (
+                            <option key={category.id} value={category.id}>{category.name}</option>
+                        ))}
+                    </select>
                 </div>
                 <button
                     type="submit"

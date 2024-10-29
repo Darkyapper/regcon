@@ -18,9 +18,9 @@ export default function TicketValidationForm() {
             setTicketInfo(null);
             return;
         }
-    
+
         console.log("Validando código del boleto:", ticketCode); // Agregado para depuración
-    
+
         try {
             const response = await fetch(`http://localhost:3000/ticket-view/${ticketCode}`);
             const data = await response.json();
@@ -38,10 +38,9 @@ export default function TicketValidationForm() {
             setTicketInfo(null);
         }
     };
-    
 
     const handleAddCategory = () => {
-        navigate('/tickets/validate/qr'); // Navegar a la página de añadir categorías
+        navigate('/tickets/validate/qr'); // Navegar a la página de escaneo QR
     };
 
     return (
@@ -86,7 +85,7 @@ export default function TicketValidationForm() {
                     <h3 className="text-lg font-bold">Información del Boleto</h3>
                     <p><strong>Código:</strong> {ticketInfo.code}</p>
                     <p><strong>Nombre:</strong> {ticketInfo.ticket_name}</p>
-                    <p><strong>Categoria:</strong> {ticketInfo.category_name}</p>
+                    <p><strong>Categoría:</strong> {ticketInfo.category_name}</p>
                     <p><strong>Costo:</strong> ${ticketInfo.category_price}</p>
                     <p><strong>Descripción:</strong> {ticketInfo.category_description}</p>
                     <p><strong>Estado:</strong> {ticketInfo.status}</p>
@@ -94,4 +93,4 @@ export default function TicketValidationForm() {
             )}
         </div>
     );
-};
+}
