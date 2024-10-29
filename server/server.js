@@ -468,6 +468,186 @@ app.get('/tickets/category/:category_id', async (req, res) => {
     }
 });
 
+// Endpoints para grupos de trabajo
+app.get('/workgroups', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM WorkGroups');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/workgroups/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('SELECT * FROM WorkGroups WHERE id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Work group not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/workgroups', async (req, res) => {
+    const { name, description } = req.body;
+    try {
+        const rows = await query(
+            'INSERT INTO WorkGroups (name, description) VALUES ($1, $2) RETURNING *',
+            [name, description]
+        );
+        res.json({ message: 'Work group created successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.put('/workgroups/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    try {
+        const rows = await query(
+            `UPDATE WorkGroups SET name = $1, description = $2 WHERE id = $3 RETURNING *`,
+            [name, description, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Work group not found' });
+        res.json({ message: 'Work group updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete('/workgroups/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('DELETE FROM WorkGroups WHERE id = $1 RETURNING id', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Work group not found' });
+        res.json({ message: 'Work group deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Endpoints para administradores
+app.get('/admin', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM Admin');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/admin/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('SELECT * FROM Admin WHERE id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Admin not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/admin', async (req, res) => {
+    const { first_name, last_name, email, phone, description, password } = req.body;
+    try {
+        const rows = await query(
+            'INSERT INTO Admin (first_name, last_name, email, phone, description, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [first_name, last_name, email, phone, description, password]
+        );
+        res.json({ message: 'Admin created successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.put('/admin/:id', async (req, res) => {
+    const { id } = req.params;
+    const { first_name, last_name, email, phone, description, password } = req.body;
+    try {
+        const rows = await query(
+            `UPDATE Admin SET first_name = $1, last_name = $2, email = $3, phone = $4, description = $5, password = $6 WHERE id = $7 RETURNING *`,
+            [first_name, last_name, email, phone, description, password, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Admin not found' });
+        res.json({ message: 'Admin updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete('/admin/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('DELETE FROM Admin WHERE id = $1 RETURNING id', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Admin not found' });
+        res.json({ message: 'Admin deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Endpoints para roles
+app.get('/roles', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM Roles');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/roles/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('SELECT * FROM Roles WHERE id = $1', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Role not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/roles', async (req, res) => {
+    const { name, description } = req.body;
+    try {
+        const rows = await query(
+            'INSERT INTO Roles (name, description) VALUES ($1, $2) RETURNING *',
+            [name, description]
+        );
+        res.json({ message: 'Role created successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.put('/roles/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    try {
+        const rows = await query(
+            `UPDATE Roles SET name = $1, description = $2 WHERE id = $3 RETURNING *`,
+            [name, description, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Role not found' });
+        res.json({ message: 'Role updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete('/roles/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const rows = await query('DELETE FROM Roles WHERE id = $1 RETURNING id', [id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Role not found' });
+        res.json({ message: 'Role deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
