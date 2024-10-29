@@ -2,9 +2,9 @@ import React from 'react';
 import './ConfigDash.css';
 import { Link } from 'react-router-dom';
 import { IoSettingsSharp, IoHelpBuoy } from "react-icons/io5";
-import { FaUserCircle, FaKey } from "react-icons/fa";
+import { FaUserCircle, FaKey, FaDatabase } from "react-icons/fa";
 import { ImFilesEmpty } from "react-icons/im";
-import { IoIosLogOut, IoMdPrint } from "react-icons/io";
+import { IoIosLogOut } from "react-icons/io";
 
 export default function ConfigDash() {
     return (
@@ -20,8 +20,8 @@ export default function ConfigDash() {
                     Configuración del perfil
                 </button>
                 <button className="action-button flex items-center">
-                    <IoMdPrint className="mr-2 text-lg" />
-                    Configuración de impresión y marca
+                    <FaDatabase className="mr-2 text-lg" />
+                    Configuración de bases de datos
                 </button>
                 <button className="action-button flex items-center">
                     <ImFilesEmpty className="mr-2 text-lg" />

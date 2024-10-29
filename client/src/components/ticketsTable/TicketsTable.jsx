@@ -52,6 +52,10 @@ export default function TicketsTable() {
         setIsModalOpen(false);
     };
 
+    const handleValidate = () => {
+        navigate('/tickets/validate');
+    };  
+
     // Paginación
     const indexOfLastCategory = currentPage * ticketCategoriesPerPage;
     const indexOfFirstCategory = indexOfLastCategory - ticketCategoriesPerPage;
@@ -61,7 +65,15 @@ export default function TicketsTable() {
 
     return (
         <div className="p-4 bg-white rounded-lg shadow-md">
-            <h2 className="title-uts">Administrar Boletos</h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="title-uts">Administrar Boletos</h2>
+                <button
+                    className="bg-teal-400 text-white py-2 px-4 rounded hover:bg-teal-500"
+                    onClick={handleValidate}
+                >
+                    Validar Boleto
+                </button>
+            </div>
             <table className="min-w-full border-collapse">
                 <thead>
                     <tr>
@@ -81,7 +93,7 @@ export default function TicketsTable() {
                             <td className="border px-4 py-2">{tc.description}</td>
                             <td className="border px-4 py-2">
                                 <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/tickets/categories/${tc.id}`)}>
-                                    <FaEye  />
+                                    <FaEye />
                                 </button>
                                 <button className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" onClick={() => navigate(`/ticket-categories/edit/${tc.id}`)}>
                                     <FaEdit />
@@ -104,9 +116,9 @@ export default function TicketsTable() {
             </div>
 
             {/* Modal de confirmación */}
-            <ConfirmDeleteModalU 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
+            <ConfirmDeleteModalU
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
                 onConfirm={confirmDelete}
             />
         </div>

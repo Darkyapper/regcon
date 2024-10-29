@@ -9,10 +9,10 @@ export default function DashboardAHome() {
     const navigate = useNavigate();
 
     const handleActionClick = (action) => {
-        if (action === 'Registrar') {
+        if (action === 'Registrar Asistencia') {
             navigate('/register/add');
         }
-        else if (action === 'Validar Boletos') {
+        else if (action === 'Validar Asistencia') {
             navigate('/tickets/validate');
         }
         else if (action === 'Crear Evento') {
@@ -40,9 +40,9 @@ export default function DashboardAHome() {
             <div className="grid grid-cols-3 gap-4">
                 <div
                     className="button-custom bg-teal-400 p-4 rounded-lg shadow-md text-white text-center cursor-pointer"
-                    onClick={() => handleActionClick('Registrar')}
+                    onClick={() => handleActionClick('Registrar Asistencia')}
                 >
-                    <h3 className="button-t-c">Registrar</h3>
+                    <h3 className="button-t-c">Registrar Asistencia</h3>
                     <div className="flex justify-center items-center">
                         <FiFilePlus className="icon-custom w-16 h-16" />
                     </div>
@@ -50,9 +50,9 @@ export default function DashboardAHome() {
 
                 <div
                     className="button-custom bg-teal-400 p-4 rounded-lg shadow-md text-white text-center cursor-pointer"
-                    onClick={() => handleActionClick('Validar Boletos')}
+                    onClick={() => handleActionClick('Validar Asistencia')}
                 >
-                    <h3 className="button-t-c">Validar Boletos</h3>
+                    <h3 className="button-t-c">Validar Asistencia</h3>
                     <div className="flex justify-center items-center">
                         <FiCheckCircle className="icon-custom w-16 h-16" />
                     </div>

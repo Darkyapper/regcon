@@ -23,6 +23,7 @@ import TicketValQR from './pages/TicketValQR';
 import TicketsPrint from './pages/TicketsPrint';
 import DashAdmRegister from './pages/DashAdmRegister';
 import RegEditReg from './pages/RegEditReg';
+import RegisterPrint from './pages/RegisterPrint';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
         <Route path="/tickets/print" element={<TicketsPrint />} />
         <Route path="/register" element={<DashAdmRegister />} />
         <Route path="/register/edit/:id" element={<RegEditReg />} />
+        <Route path="/register/print" element={<RegisterPrint />} />
       </Routes>
     </Router>
   );

@@ -29,7 +29,7 @@ export default function RecommendedActions() {
                     Registre a sus usuarios
                 </button>
                 <button onClick={() => selectActionClic('Crear e imprimir informes')} className="action-button">
-                    Crear e imprimir informes
+                    Configure su base de datos
                 </button>
                 <button onClick={() => selectActionClic('Conozca y aprenda a usar RegCon')} className="action-button">
                     ¡Conozca y aprenda a usar RegCon!
