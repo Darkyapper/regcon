@@ -30,7 +30,8 @@ function App() {
     <Router>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<LogInPage />} />
+        <Route path="/" element={<DashboardHome />} />
+        <Route path="/login" element={<LogInPage />} />
         <Route path="/dashboard" element={<DashboardHome />} />
         <Route path="/settings" element={<DashboardSettings />} />
         <Route path="/users/add" element={<DashAddUsers />} />

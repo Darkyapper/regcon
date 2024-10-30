@@ -1,12 +1,21 @@
 import React from 'react';
 import './ConfigDash.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { IoSettingsSharp, IoHelpBuoy } from "react-icons/io5";
 import { FaUserCircle, FaKey, FaDatabase } from "react-icons/fa";
 import { ImFilesEmpty } from "react-icons/im";
 import { IoIosLogOut } from "react-icons/io";
 
 export default function ConfigDash() {
+    const navigate = useNavigate(); // Inicializa useNavigate
+
+    const handleLogout = () => {
+        // Eliminar el token del almacenamiento local
+        localStorage.removeItem('token'); // Cambia 'token' al nombre que estés usando
+        // Redirigir a la página de inicio de sesión
+        navigate('/'); // Asegúrate de que esta ruta sea la correcta
+    };
+
     return (
         <div className="recommended-actions p-4 bg-white rounded-lg shadow-md">
             <h1 className="text-lg mb-4">Configuraciones</h1>
@@ -35,10 +44,11 @@ export default function ConfigDash() {
                     <IoHelpBuoy className="mr-2 text-lg" />
                     Ayuda y soporte
                 </button>
-                <Link to="/" className='action-button'>
-                        <IoIosLogOut className="mr-2 text-lg" />
-                        Cerrar Sesión
-                </Link>
+                {/* Cambia Link a button para manejar el logout */}
+                <button onClick={handleLogout} className='action-button flex items-center'>
+                    <IoIosLogOut className="mr-2 text-lg" />
+                    Cerrar Sesión
+                </button>
                 <span className="block text-sm sm:text-center">
                     © 2024 RegCon™. All Rights Reserved.
                 </span>

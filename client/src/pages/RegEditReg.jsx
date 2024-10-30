@@ -1,9 +1,19 @@
-import React from 'react'
-import Navbar from '../components/navbar/Navbar'
-import Sidebar from '../components/sidebar/Sidebar'
-import EditRegForm from '../components/editRegForm/EditRegForm'
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/navbar/Navbar';
+import Sidebar from '../components/sidebar/Sidebar';
+import EditRegForm from '../components/editRegForm/EditRegForm';
 
-export default function RegEditReg() {
+const RegEditReg = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login'); // Redirigir al inicio de sesión si no hay token
+        }
+    }, [navigate]);
+
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
@@ -14,5 +24,7 @@ export default function RegEditReg() {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
+
+export default RegEditReg; // Asegúrate de que esto esté presente

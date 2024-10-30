@@ -3,6 +3,7 @@ const cors = require('cors');
 const { Pool } = require('pg');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,7 +21,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-app.use(cors());
+app.use(cors({
+    origin: '*', // Permitir todas las solicitudes de origen
+}));
+
 app.use(express.json());
 
 // Configuración de conexión a Supabase PostgreSQL
@@ -71,6 +75,11 @@ const generateTempPassword = () => {
     return tempPassword;
 };
 
+/***************************************************************
+ * 
+ *                ENPOINTS PARA ADMINISTRADORES
+ * 
+ * ************************************************************/
 // Enpoints para usuarios
 app.get('/users', async (req, res) => {
     try {
@@ -648,6 +657,40 @@ app.delete('/roles/:id', async (req, res) => {
     }
 });
 
+// Endpoint para iniciar sesión
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        // Buscar al administrador por correo electrónico
+        const admin = await query('SELECT * FROM Admin WHERE email = $1', [email]);
+
+        if (admin.length === 0) {
+            return res.status(401).json({ error: 'Contraseña o Correo Incorrecto' });
+        }
+
+        // Verificar la contraseña
+        const isMatch = await bcrypt.compare(password, admin[0].password);
+
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Contraseña o Correo Incorrecto' });
+        }
+
+        // Crear un token
+        const token = jwt.sign({ id: admin[0].id }, 'tu_secreto_aqui', { expiresIn: '1h' });
+
+        res.json({ message: 'Inicio de sesión exitoso', token });
+    } catch (error) {
+        console.error('Error en el servidor:', error);
+        res.status(500).json({ error: 'Error del servidor' });
+    }
+});
+
+/***************************************************************
+ * 
+ *             ENPOINTS PARA PAGINA USUARIOS
+ * 
+ * ************************************************************/
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

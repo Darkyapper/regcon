@@ -1,16 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react'; // Importar useState para manejar el estado
 import './LoginForm.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
     const navigate = useNavigate();
+    const [email, setEmail] = useState(''); // Estado para el correo electrónico
+    const [password, setPassword] = useState(''); // Estado para la contraseña
+    const [error, setError] = useState(''); // Estado para manejar errores
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        try {
+            const response = await fetch('http://localhost:3000/login', { // Cambiar a tu endpoint de inicio de sesión
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }), // Enviar email y contraseña
+            });
 
-        // Aquí añadir la lógica para validar las credenciales del usuario
-        // Si las credenciales son correctas, redirigir a la página del dashboard
-        navigate('/dashboard');
+            const data = await response.json();
+            if (response.ok) {
+                // Guardar el token en el almacenamiento local
+                localStorage.setItem('token', data.token);
+                navigate('/dashboard'); // Redirigir a la página del dashboard
+            } else {
+                setError(data.error || 'Error al iniciar sesión'); // Manejar errores
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setError('Error de conexión. Intenta de nuevo.');
+        }
     };
 
     return (
@@ -25,6 +46,7 @@ export default function LoginForm() {
                             Inicia sesión con las credenciales proporcionadas por tu administrador
                         </p>
                     </div>
+                    {error && <p className="text-red-500">{error}</p>} {/* Mostrar mensaje de error si hay */}
                     <div className="mb-5">
                         <label
                             htmlFor="email"
@@ -35,6 +57,8 @@ export default function LoginForm() {
                         <input
                             type="email"
                             id="email"
+                            value={email} // Vincular el valor del input al estado
+                            onChange={(e) => setEmail(e.target.value)} // Actualizar el estado
                             className="border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             placeholder="admin@mymail.com"
                             required=""
@@ -50,6 +74,8 @@ export default function LoginForm() {
                         <input
                             type="password"
                             id="password"
+                            value={password} // Vincular el valor del input al estado
+                            onChange={(e) => setPassword(e.target.value)} // Actualizar el estado
                             className="border rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                             required=""
                         />
