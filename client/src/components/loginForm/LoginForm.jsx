@@ -43,7 +43,7 @@ export default function LoginForm() {
                             Iniciar Sesión
                         </h1>
                         <p className='description-form'>
-                            Inicia sesión con las credenciales proporcionadas por tu administrador
+                            Inicia sesión con las credenciales con las que te registraste en RegCon™ o las proporcionadas por tu administrador
                         </p>
                     </div>
                     {error && <p className="text-red-500">{error}</p>} {/* Mostrar mensaje de error si hay */}
