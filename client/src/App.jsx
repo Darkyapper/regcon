@@ -24,6 +24,8 @@ import TicketsPrint from './pages/TicketsPrint';
 import DashAdmRegister from './pages/DashAdmRegister';
 import RegEditReg from './pages/RegEditReg';
 import RegisterPrint from './pages/RegisterPrint';
+import AttenVal from './pages/AttenVal';
+import NotFound from './components/notFound/NotFound';
 
 function App() {
   return (
@@ -54,6 +56,8 @@ function App() {
         <Route path="/register" element={<DashAdmRegister />} />
         <Route path="/register/edit/:id" element={<RegEditReg />} />
         <Route path="/register/print" element={<RegisterPrint />} />
+        <Route path="/attendance-validation" element={<AttenVal />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

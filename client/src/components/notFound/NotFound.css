@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* NotFound.css */
+
+
+.not-found {
+    text-align: center;
+    padding-top: 15rem;
+    background-color: #EB6D1E;
+    width: 100%;
+    height: 100vh;
+}
+
+.not-found h1 {
+    font-family: 'Tilt Neon', sans-serif;
+    font-size: 4rem;
+    color: #fff;
+}
+
+.not-found p {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.go-home-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #40B2A4; /* Cambia según tu tema */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.go-home-button:hover {
+    background-color: #339C8A;
+}
