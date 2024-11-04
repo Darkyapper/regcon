@@ -22,14 +22,15 @@ export default function TicketValidationForm() {
         console.log("Validando código del boleto:", ticketCode); // Agregado para depuración
 
         try {
-            const response = await fetch(`http://localhost:3000/ticket-view/${ticketCode}`);
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtener el workgroup_id de la sesión
+            const response = await fetch(`http://localhost:3000/ticket-view/${ticketCode}?workgroup_id=${workgroupId}`); // Enviar workgroup_id
             const data = await response.json();
             console.log("Respuesta de la API:", data); // Agregado para depuración
             if (response.ok) {
                 setTicketInfo(data.data);
                 setError('');
             } else {
-                setError('Este boleto no existe o es inválido.');
+                setError(data.message || 'Este boleto no existe o es inválido.'); // Mensaje de error más específico
                 setTicketInfo(null);
             }
         } catch (error) {

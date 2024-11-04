@@ -169,13 +169,16 @@ app.post('/events', async (req, res) => {
 });
 
 app.get('/events', async (req, res) => {
+    const { workgroup_id } = req.query; // Obtén el workgroup_id de la consulta
+
     try {
-        const rows = await query('SELECT * FROM Events');
+        const rows = await query('SELECT * FROM Events WHERE workgroup_id = $1', [workgroup_id]);
         res.json({ message: 'Success', data: rows });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 app.get('/events/:id', async (req, res) => {
     const { id } = req.params;
@@ -229,13 +232,16 @@ app.post('/ticket-categories', async (req, res) => {
 });
 
 app.get('/ticket-categories', async (req, res) => {
+    const { workgroup_id } = req.query; // Obtener el workgroup_id de la consulta
+
     try {
-        const rows = await query('SELECT * FROM TicketCategories');
+        const rows = await query('SELECT * FROM TicketCategories WHERE workgroup_id = $1', [workgroup_id]);
         res.json({ message: 'Success', data: rows });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 app.get('/ticket-categories/:id', async (req, res) => {
     const { id } = req.params;
@@ -338,24 +344,31 @@ app.delete('/tickets/:code', async (req, res) => {
 
 // Endpoint para tener los boletos con su información completa
 app.get('/ticket-view', async (req, res) => {
+    const { workgroup_id } = req.query; // Obtener el workgroup_id de la consulta
+
     try {
-        const rows = await query('SELECT * FROM TicketFullInfo');
+        // Filtrar tickets según el workgroup_id
+        const rows = await query('SELECT * FROM TicketFullInfo WHERE workgroup_id = $1', [workgroup_id]);
         res.json({ message: 'Success', data: rows });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
+
 app.get('/ticket-view/:code', async (req, res) => {
     const { code } = req.params;
+    const workgroupId = req.query.workgroup_id; // Obtener el workgroup_id de la consulta
+
     try {
-        const rows = await query('SELECT * FROM TicketFullInfo WHERE code = $1', [code]);
-        if (rows.length === 0) return res.status(404).json({ message: 'Ticket not found' });
+        const rows = await query('SELECT * FROM TicketFullInfo WHERE code = $1 AND workgroup_id = $2', [code, workgroupId]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Este boleto no existe o es inválido.' });
         res.json({ message: 'Success', data: rows[0] });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 // Endpoints para registros (Attendance en lugar de Registration)
 app.get('/attendance', async (req, res) => {
@@ -447,13 +460,16 @@ app.get('/attendance-info/:id', async (req, res) => {
 
 // enpoint para obtener las categorías de boletos con sus respectivos conteos
 app.get('/ticket-categories-with-counts', async (req, res) => {
+    const { workgroup_id } = req.query; // Obtener el workgroup_id de la consulta
+
     try {
-        const rows = await query('SELECT * FROM TicketCategoriesWithCounts');
+        const rows = await query('SELECT * FROM TicketCategoriesWithCounts WHERE workgroup_id = $1', [workgroup_id]);
         res.json({ message: 'Success', data: rows });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 app.get('/ticket-categories-with-counts/:id', async (req, res) => {
     const { id } = req.params;
@@ -666,23 +682,37 @@ app.post('/login', async (req, res) => {
         const admin = await query('SELECT * FROM Admin WHERE email = $1', [email]);
 
         if (admin.length === 0) {
-            return res.status(401).json({ error: 'Contraseña o Correo Incorrecto' });
+            return res.status(401).json({ error: 'Credenciales inválidas' });
         }
 
         // Verificar la contraseña
         const isMatch = await bcrypt.compare(password, admin[0].password);
-
         if (!isMatch) {
-            return res.status(401).json({ error: 'Contraseña o Correo Incorrecto' });
+            return res.status(401).json({ error: 'Credenciales inválidas' });
         }
 
-        // Crear un token
-        const token = jwt.sign({ id: admin[0].id }, 'tu_secreto_aqui', { expiresIn: '1h' });
+        // Obtener el workgroup_id de la tabla membership
+        const membership = await query('SELECT workgroup_id FROM membership WHERE admin_id = $1', [admin[0].id]);
+        const workgroup_id = membership.length > 0 ? membership[0].workgroup_id : null;
 
-        res.json({ message: 'Inicio de sesión exitoso', token });
+        // Crear un token
+        const token = jwt.sign({ id: admin[0].id, workgroup_id }, 'tu_secreto_aqui', { expiresIn: '1h' });
+
+        res.json({ message: 'Inicio de sesión exitoso', token, workgroup_id });
     } catch (error) {
-        console.error('Error en el servidor:', error);
         res.status(500).json({ error: 'Error del servidor' });
+    }
+});
+
+// Obtener todos los registros de la vista usersmembership
+app.get('/usersmembership', async (req, res) => {
+    const { workgroup_id } = req.query; // Obtener el workgroup_id de la consulta
+
+    try {
+        const rows = await query('SELECT * FROM usersmembership WHERE workgroup_id = $1', [workgroup_id]); // Filtrar por workgroup_id
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 

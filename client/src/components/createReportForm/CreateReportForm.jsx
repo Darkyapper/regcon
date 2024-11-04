@@ -18,8 +18,15 @@ export default function CreateReportForm() {
 
     useEffect(() => {
         const fetchUsers = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/users');
+                const response = await fetch(`http://localhost:3000/usersmembership?workgroup_id=${workgroupId}`); // Llama al endpoint con el workgroup_id
                 const data = await response.json();
                 if (response.ok) {
                     setUsers(data.data); // Suponiendo que 'data' contiene la lista de usuarios
@@ -58,18 +65,19 @@ export default function CreateReportForm() {
     };
 
     const addTableToPDF = (doc) => {
-        // Asegúrate de que registration_date sea un formato válido
+        // Asegúrate de que los campos sean los correctos
         const tableData = users.map(user => [
-            user.id, 
-            user.first_name, 
-            user.last_name, 
-            user.email, 
-            user.phone, 
+            user.user_first_name, 
+            user.user_last_name, 
+            user.user_email, 
+            user.user_phone, 
+            user.event_name, 
+            user.status, 
             new Date(user.registration_date).toLocaleString() // Formatear la fecha
         ]);
 
         autoTable(doc, {
-            head: [['ID', 'Nombre', 'Apellido', 'Correo', 'Teléfono', 'Fecha de Registro']],
+            head: [['Nombre', 'Apellido', 'Correo', 'Teléfono', 'Evento', 'Estado', 'Fecha de Registro']],
             body: tableData,
             startY: 60, // Ajusta la posición de inicio de la tabla
             styles: {

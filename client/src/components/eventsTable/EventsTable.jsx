@@ -14,18 +14,26 @@ export default function EventsTable() {
 
     useEffect(() => {
         const fetchEvents = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+        
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+        
             try {
-                const response = await fetch('http://localhost:3000/events');
+                const response = await fetch(`http://localhost:3000/events?workgroup_id=${workgroupId}`);
                 const data = await response.json();
                 if (response.ok) {
-                    setEvents(data.data); // Asegúrate de que 'data' contenga la lista de eventos
+                    setEvents(data.data); 
                 } else {
-                    console.error('Error fetching events:', data.error);
+                    console.error('Error al obtener eventos:', data.error);
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error de red:', error);
             }
         };
+        
         fetchEvents();
     }, []);
 

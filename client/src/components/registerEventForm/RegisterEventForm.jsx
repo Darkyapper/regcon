@@ -14,8 +14,15 @@ export default function RegisterEventForm() {
 
     useEffect(() => {
         const fetchCategories = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/ticket-categories'); // Endpoint para obtener categorías de boletos
+                const response = await fetch(`http://localhost:3000/ticket-categories?workgroup_id=${workgroupId}`); // Modificar la URL para incluir el workgroup_id
                 const data = await response.json();
                 if (response.ok) {
                     setCategories(data.data); // Suponiendo que 'data' contiene la lista de categorías
@@ -108,7 +115,7 @@ export default function RegisterEventForm() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="category_id" className="block text-sm font-medium text-gray-700">Categoría de Boleto</label>
+                    <label htmlFor="category_id" className="block text-sm font-medium text-gray-700">Tipo de Boleto para Acceder</label>
                     <select
                         id="category_id"
                         name="category_id"

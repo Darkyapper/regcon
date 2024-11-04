@@ -18,8 +18,16 @@ export default function CreateTicketsReport() {
 
     useEffect(() => {
         const fetchTickets = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/ticket-view'); // Asegúrate de que la URL sea correcta
+                // Modificar la URL para incluir el workgroup_id
+                const response = await fetch(`http://localhost:3000/ticket-view?workgroup_id=${workgroupId}`); 
                 const data = await response.json();
                 if (response.ok) {
                     setTickets(data.data); // Actualizar para obtener la información de los boletos

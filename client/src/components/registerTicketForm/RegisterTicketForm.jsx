@@ -19,11 +19,19 @@ export default function RegisterTicketForm() {
 
     useEffect(() => {
         const fetchCategories = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/ticket-categories'); // Cambia la URL al endpoint de categorías
+                // Modificar la URL para incluir el workgroup_id
+                const response = await fetch(`http://localhost:3000/ticket-categories?workgroup_id=${workgroupId}`);
                 const data = await response.json();
                 if (response.ok) {
-                    setCategories(data.data); // Asumiendo que el formato es { data: [...] }
+                    setCategories(data.data); // Cargar categorías de boletos
                 } else {
                     alert(data.error || 'Error al obtener categorías');
                 }

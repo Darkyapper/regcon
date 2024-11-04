@@ -15,18 +15,27 @@ export default function TCTable() {
 
     useEffect(() => {
         const fetchTicketCategories = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id');
+        
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+        
             try {
-                const response = await fetch('http://localhost:3000/ticket-categories');
-                const data = await response.json();
+                const response = await fetch(`http://localhost:3000/ticket-categories?workgroup_id=${workgroupId}`);
+                const data = await response.json(); // Obtener los datos de la respuesta
+                console.log('Response data:', data); // Agregar este log para inspeccionar los datos
                 if (response.ok) {
-                    setTicketCategories(data.data); // Suponiendo que 'data' contiene la lista de categorías
+                    setTicketCategories(data.data); // Cargar categorías de boletos
                 } else {
                     console.error('Error fetching ticket categories:', data.error);
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
-        };
+        };        
+        
         fetchTicketCategories();
     }, []);
 
@@ -130,4 +139,4 @@ export default function TCTable() {
             />
         </div>
     );
-};
+}

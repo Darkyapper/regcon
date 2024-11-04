@@ -24,7 +24,12 @@ export default function EditEventForm() {
                 const response = await fetch(`http://localhost:3000/events/${id}`);
                 const data = await response.json();
                 if (response.ok) {
-                    setFormData(data.data);
+                    // Asegúrate de que la fecha esté en el formato correcto
+                    const formattedDate = new Date(data.data.event_date).toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                    setFormData({ 
+                        ...data.data, 
+                        event_date: formattedDate // Asigna la fecha formateada
+                    });
                 } else {
                     alert(data.error || 'Error al obtener datos del evento');
                 }
@@ -32,10 +37,17 @@ export default function EditEventForm() {
                 console.error('Error:', error);
             }
         };
-
+    
         const fetchCategories = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+    
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+    
             try {
-                const response = await fetch('http://localhost:3000/ticket-categories'); // Obtener categorías de boletos
+                const response = await fetch(`http://localhost:3000/ticket-categories?workgroup_id=${workgroupId}`); // Modificar la URL para incluir el workgroup_id
                 const data = await response.json();
                 if (response.ok) {
                     setCategories(data.data); // Suponiendo que 'data' contiene la lista de categorías
@@ -46,11 +58,11 @@ export default function EditEventForm() {
                 console.error('Error:', error);
             }
         };
-
+    
         fetchEvent();
         fetchCategories(); // Llamar a la función para obtener categorías
     }, [id]);
-
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -149,7 +161,7 @@ export default function EditEventForm() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="category_id" className="block text-sm font-medium text-gray-700">Categoría de Boleto</label>
+                    <label htmlFor="category_id" className="block text-sm font-medium text-gray-700">Tipo de Boleto para Acceder</label>
                     <select
                         id="category_id"
                         name="category_id"

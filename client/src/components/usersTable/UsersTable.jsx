@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './UsersTable.css';
-import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 import ConfirmDeleteModalU from '../confirmDeleteModalU/ConfirmDeleteModalU';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,8 +14,15 @@ export default function UsersTable() {
 
     useEffect(() => {
         const fetchUsers = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/users'); // Asegúrate de que este endpoint esté funcionando
+                const response = await fetch(`http://localhost:3000/usersmembership?workgroup_id=${workgroupId}`); // Cambiar endpoint
                 const data = await response.json();
                 if (response.ok) {
                     setUsers(data.data); // Asegúrate de que 'data' contenga la lista de usuarios
@@ -61,15 +68,16 @@ export default function UsersTable() {
 
     return (
         <div className="p-4 bg-white rounded-lg shadow-md">
-            <h2 className="title-uts">Administrar Usuarios</h2>
+            <h2 className="title-uts">Administrar Usuarios Registrados en Eventos</h2>
             <table className="min-w-full border-collapse">
                 <thead>
                     <tr>
-                        <th className="border px-4 py-2">ID</th>
                         <th className="border px-4 py-2">Nombre</th>
                         <th className="border px-4 py-2">Apellido</th>
                         <th className="border px-4 py-2">Correo</th>
                         <th className="border px-4 py-2">Teléfono</th>
+                        <th className="border px-4 py-2">Evento</th>
+                        <th className="border px-4 py-2">Estado</th>
                         <th className="border px-4 py-2">Fecha de Registro</th>
                         <th className="border px-4 py-2">Acciones</th>
                     </tr>
@@ -77,19 +85,14 @@ export default function UsersTable() {
                 <tbody>
                     {currentUsers.map(user => (
                         <tr key={user.id}>
-                            <td className="border px-4 py-2">{user.id}</td>
-                            <td className="border px-4 py-2">{user.first_name}</td>
-                            <td className="border px-4 py-2">{user.last_name}</td>
-                            <td className="border px-4 py-2">{user.email}</td>
-                            <td className="border px-4 py-2">{user.phone}</td>
-                            <td className="border px-4 py-2">{new Date(user.registration_date).toLocaleString()}</td> {/* Formatea la fecha */}
+                            <td className="border px-4 py-2">{user.user_first_name}</td>
+                            <td className="border px-4 py-2">{user.user_last_name}</td>
+                            <td className="border px-4 py-2">{user.user_email}</td>
+                            <td className="border px-4 py-2">{user.user_phone}</td>
+                            <td className="border px-4 py-2">{user.event_name}</td>
+                            <td className="border px-4 py-2">{user.status}</td>
+                            <td className="border px-4 py-2">{new Date(user.registration_date).toLocaleString()}</td>
                             <td className="border px-4 py-2">
-                                <button 
-                                    className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black" 
-                                    onClick={() => navigate(`/users/edit/${user.id}`)}
-                                >
-                                    <FaEdit />
-                                </button>
                                 <button 
                                     className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" 
                                     onClick={() => handleDeleteClick(user.id)}

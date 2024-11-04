@@ -13,8 +13,10 @@ export default function QRCodeReaderVal() {
             const code = data.text; // Extrae el código correctamente
             setResult(code);
 
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtener el workgroup_id de la sesión
+
             try {
-                const response = await fetch(`http://localhost:3000/ticket-view/${code.trim()}`); // URL para validar el boleto
+                const response = await fetch(`http://localhost:3000/ticket-view/${code.trim()}?workgroup_id=${workgroupId}`); // URL para validar el boleto
                 const info = await response.json();
                 if (response.ok) {
                     setTicketInfo(info.data); // Almacena la información del boleto

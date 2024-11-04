@@ -14,11 +14,19 @@ export default function TicketsTable() {
 
     useEffect(() => {
         const fetchTicketCategories = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/ticket-categories-with-counts'); // Endpoint que devuelve categorías de boletos con conteo
+                // Cambiar la URL para incluir el workgroup_id en la solicitud
+                const response = await fetch(`http://localhost:3000/ticket-categories-with-counts?workgroup_id=${workgroupId}`);
                 const data = await response.json();
                 if (response.ok) {
-                    setTicketCategories(data.data); // Cargar categorías de boletos
+                    setTicketCategories(data.data); // Cargar categorías de boletos filtradas
                 } else {
                     console.error('Error fetching ticket categories:', data.error);
                 }
@@ -26,6 +34,7 @@ export default function TicketsTable() {
                 console.error('Error:', error);
             }
         };
+
         fetchTicketCategories();
     }, []);
 

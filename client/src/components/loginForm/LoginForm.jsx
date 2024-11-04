@@ -10,30 +10,31 @@ export default function LoginForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+    
         try {
-            const response = await fetch('http://localhost:3000/login', { // Cambiar a tu endpoint de inicio de sesión
+            const response = await fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }), // Enviar email y contraseña
+                body: JSON.stringify({ email, password }),
             });
-
+    
             const data = await response.json();
             if (response.ok) {
-                // Guardar el token en el almacenamiento local
                 localStorage.setItem('token', data.token);
-                navigate('/dashboard'); // Redirigir a la página del dashboard
+                localStorage.setItem('workgroup_id', data.workgroup_id); // Asegúrate de que esto se esté estableciendo
+                navigate('/dashboard');
             } else {
-                setError(data.error || 'Error al iniciar sesión'); // Manejar errores
+                alert(data.error);
             }
         } catch (error) {
-            console.error('Error:', error);
-            setError('Error de conexión. Intenta de nuevo.');
+            console.error('Error en la solicitud de inicio de sesión:', error);
         }
     };
-
+    
     return (
         <div className='main-container'>
             <div className='custom-form'>
