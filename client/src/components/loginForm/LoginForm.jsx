@@ -18,13 +18,14 @@ export default function LoginForm() {
                 },
                 body: JSON.stringify({ email, password }),
             });
-    
+
             const data = await response.json();
             if (response.ok) {
-                // Guardar el token, workgroup_id y user_id en localStorage
+                // Guardar el token, workgroup_id, user_id y role_id en localStorage
                 localStorage.setItem('token', data.token);
-                localStorage.setItem('workgroup_id', data.workgroup_id); 
+                localStorage.setItem('workgroup_id', data.workgroup_id);
                 localStorage.setItem('user_id', data.user_id); // Almacenar el ID del usuario
+                localStorage.setItem('role_id', data.role_id); // Almacenar el role_id
                 navigate('/dashboard'); // Navega a la página de dashboard o donde desees
             } else {
                 setError(data.error);
@@ -34,28 +35,20 @@ export default function LoginForm() {
             setError('Error al intentar iniciar sesión.');
         }
     };
-    
-    
+
     return (
         <div className='main-container'>
             <div className='custom-form'>
                 <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
                     <div className="info-form">
-                        <h1 className='title-form'>
-                            Iniciar Sesión
-                        </h1>
+                        <h1 className='title-form'>Iniciar Sesión</h1>
                         <p className='description-form'>
                             Inicia sesión con las credenciales con las que te registraste en RegCon™ o las proporcionadas por tu administrador
                         </p>
                     </div>
                     {error && <p className="text-red-500">{error}</p>} {/* Mostrar mensaje de error si hay */}
                     <div className="mb-5">
-                        <label
-                            htmlFor="email"
-                            className="block mb-2 text-sm font-medium text-gray-900"
-                        >
-                            Correo
-                        </label>
+                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Correo</label>
                         <input
                             type="email"
                             id="email"
@@ -67,12 +60,7 @@ export default function LoginForm() {
                         />
                     </div>
                     <div className="mb-5">
-                        <label
-                            htmlFor="password"
-                            className="block mb-2 text-sm font-medium text-gray-900"
-                        >
-                            Contraseña
-                        </label>
+                        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
                         <input
                             type="password"
                             id="password"

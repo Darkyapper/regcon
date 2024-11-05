@@ -742,17 +742,19 @@ app.post('/login', async (req, res) => {
         }
 
         // Obtener el workgroup_id de la tabla membership
-        const membership = await query('SELECT workgroup_id FROM membership WHERE admin_id = $1', [admin[0].id]);
+        const membership = await query('SELECT workgroup_id, role_id FROM membership WHERE admin_id = $1', [admin[0].id]);
         const workgroup_id = membership.length > 0 ? membership[0].workgroup_id : null;
+        const role_id = membership.length > 0 ? membership[0].role_id : null; // Obtener role_id
 
         // Crear un token
-        const token = jwt.sign({ id: admin[0].id, workgroup_id }, 'tu_secreto_aqui', { expiresIn: '1h' });
+        const token = jwt.sign({ id: admin[0].id, workgroup_id, role_id }, 'tu_secreto_aqui', { expiresIn: '1h' });
 
-        res.json({ message: 'Inicio de sesión exitoso', token, workgroup_id, user_id: admin[0].id }); // Agregar user_id aquí
+        res.json({ message: 'Inicio de sesión exitoso', token, workgroup_id, role_id, user_id: admin[0].id }); // Agregar role_id aquí
     } catch (error) {
         res.status(500).json({ error: 'Error del servidor' });
     }
 });
+
 
 // Obtener todos los registros de la vista usersmembership
 app.get('/usersmembership', async (req, res) => {
