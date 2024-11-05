@@ -28,6 +28,7 @@ import AttenVal from './pages/AttenVal';
 import NotFound from './components/notFound/NotFound';
 import MyWorkGroup from './pages/MyWorkGroup';
 import ProfilePage from './pages/ProfilePage';
+import Stadistic from './pages/Stadistic';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
         <Route path="/attendance-validation" element={<AttenVal />} />
         <Route path="/my-workgroup" element={<MyWorkGroup />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/stadistics" element={<Stadistic />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
