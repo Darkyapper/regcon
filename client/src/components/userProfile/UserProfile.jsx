@@ -36,6 +36,7 @@ export default function UserProfile() {
                     <div className="profile-info mt-4 flex items-center">
                         <img src={user.picture || 'default-avatar.png'} alt="Foto de perfil" className="rounded-full w-32 h-32 mr-4" />
                         <div className="user-details">
+                            <p className='consejo'>Tu usuario lo puedes editar desde la página principal de RegCon™</p>
                             <p><strong>Nombre:</strong> {user.first_name} {user.last_name}</p>
                             <p><strong>Email:</strong> {user.email}</p>
                             <p><strong>Teléfono:</strong> {user.phone}</p>
