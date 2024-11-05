@@ -156,11 +156,11 @@ app.delete('/users/:id', async (req, res) => {
 
 // Endpoints para Eventos
 app.post('/events', async (req, res) => {
-    const { name, event_date, location, description, category_id, workgroup_id } = req.body;
+    const { name, event_date, location, description, category_id, workgroup_id, image } = req.body;
     try {
         const rows = await query(
-            'INSERT INTO Events (name, event_date, location, description, category_id, workgroup_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-            [name, event_date, location, description, category_id, workgroup_id]
+            'INSERT INTO Events (name, event_date, location, description, category_id, workgroup_id, image) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+            [name, event_date, location, description, category_id, workgroup_id, image]
         );
         res.json({ message: 'Event created successfully', data: rows[0] });
     } catch (error) {

@@ -8,7 +8,8 @@ export default function RegisterEventForm() {
         location: '',
         description: '',
         category_id: '',
-        workgroup_id: '' // Agregar workgroup_id aquí
+        workgroup_id: '', // Agregar workgroup_id aquí
+        image: '' // Agregar campo para la imagen
     });
 
     const [categories, setCategories] = useState([]);
@@ -57,12 +58,12 @@ export default function RegisterEventForm() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData) // Enviar formData que ahora incluye workgroup_id
+                body: JSON.stringify(formData) // Enviar formData que ahora incluye workgroup_id e image
             });
             const data = await response.json();
             if (response.ok) {
                 alert('Evento creado exitosamente');
-                setFormData({ name: '', event_date: '', location: '', description: '', category_id: '', workgroup_id: '' }); // Reset form
+                setFormData({ name: '', event_date: '', location: '', description: '', category_id: '', workgroup_id: '', image: '' }); // Reset form
             } else {
                 alert(data.error || 'Error al crear el evento');
             }
@@ -137,6 +138,19 @@ export default function RegisterEventForm() {
                             <option key={category.id} value={category.id}>{category.name}</option>
                         ))}
                     </select>
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="image" className="block text-sm font-medium text-gray-700">Link de la imagen (800x600 preferentemente)</label>
+                    <input
+                        type="url"
+                        id="image"
+                        name="image"
+                        value={formData.image}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border rounded-md p-2"
+                        placeholder="https://ejemplo.com/imagen.jpg"
+                    />
                 </div>
                 <button
                     type="submit"
