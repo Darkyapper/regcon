@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Asegúrate de importar useNavigate
 import './RegisterTCForm.css';
 import { IoArrowBackOutline } from "react-icons/io5"; // Asegúrate de importar el icono
@@ -10,7 +10,21 @@ export default function RegisterTCForm() {
         name: '',
         price: '',
         description: '',
+        workgroup_id: '' // Agregar workgroup_id aquí
     });
+
+    useEffect(() => {
+        // Obtener el workgroup_id del local storage y guardarlo en el formulario
+        const workgroupId = localStorage.getItem('workgroup_id');
+        if (workgroupId) {
+            setFormData(prevState => ({
+                ...prevState,
+                workgroup_id: workgroupId // Asignar workgroup_id aquí
+            }));
+        } else {
+            console.error('No se encontró workgroup_id en el local storage');
+        }
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,12 +39,12 @@ export default function RegisterTCForm() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData) // Enviar formData que ahora incluye workgroup_id
             });
             const data = await response.json();
             if (response.ok) {
                 alert('Categoría de boletos registrada exitosamente');
-                setFormData({ name: '', price: '', description: '' }); // Resetear el formulario
+                setFormData({ name: '', price: '', description: '', workgroup_id: '' }); // Resetear el formulario
             } else {
                 alert(data.error || 'Error al registrar la categoría de boletos');
             }

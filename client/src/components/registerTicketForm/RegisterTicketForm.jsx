@@ -13,7 +13,8 @@ export default function RegisterTicketForm() {
     const [formData, setFormData] = useState({
         name: '',
         category_id: '',
-        quantity: 1 // Inicializa la cantidad en 1
+        quantity: 1, // Inicializa la cantidad en 1
+        workgroup_id: '' // Agregar workgroup_id aquí
     });
     const [categories, setCategories] = useState([]);
 
@@ -32,6 +33,10 @@ export default function RegisterTicketForm() {
                 const data = await response.json();
                 if (response.ok) {
                     setCategories(data.data); // Cargar categorías de boletos
+                    setFormData(prevState => ({
+                        ...prevState,
+                        workgroup_id: workgroupId // Asignar workgroup_id aquí
+                    }));
                 } else {
                     alert(data.error || 'Error al obtener categorías');
                 }
@@ -59,7 +64,7 @@ export default function RegisterTicketForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { name, category_id, quantity } = formData;
+        const { name, category_id, quantity, workgroup_id } = formData;
 
         // Crear múltiples boletos
         const ticketPromises = [];
@@ -68,7 +73,8 @@ export default function RegisterTicketForm() {
                 code: generateUniqueCode(), // Generar un nuevo código único
                 name: name,
                 category_id: category_id,
-                status: 'Sin Usar' // Establecer el estado por defecto
+                status: 'Sin Usar', // Establecer el estado por defecto
+                workgroup_id: workgroup_id // Incluir workgroup_id
             };
             ticketPromises.push(
                 fetch('http://localhost:3000/tickets', {
@@ -89,7 +95,7 @@ export default function RegisterTicketForm() {
                 alert(errorData.error || 'Error al registrar algunos boletos');
             } else {
                 alert('Boleto(s) registrado(s) exitosamente');
-                setFormData({ name: '', category_id: '', quantity: 1 }); // Resetear el formulario
+                setFormData({ name: '', category_id: '', quantity: 1, workgroup_id: '' }); // Resetear el formulario
             }
         } catch (error) {
             console.error('Error:', error);

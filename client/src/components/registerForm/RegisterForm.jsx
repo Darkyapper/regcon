@@ -9,7 +9,8 @@ export default function RegisterForm() {
     const [formData, setFormData] = useState({
         user_id: '',
         event_id: '',
-        ticket_code: ''
+        ticket_code: '',
+        workgroup_id: '' // Agregar workgroup_id aquí
     });
     const [users, setUsers] = useState([]);
     const [events, setEvents] = useState([]);
@@ -113,13 +114,24 @@ export default function RegisterForm() {
         e.preventDefault();
         const isValidTicket = await handleTicketValidation();
         if (isValidTicket) {
+            // Obtener el workgroup_id
+            const workgroupId = localStorage.getItem('workgroup_id');
+            if (!workgroupId) {
+                setModalMessage('No se encontró workgroup_id en el almacenamiento local.');
+                setErrorModalVisible(true);
+                return;
+            }
+
+            // Añadir el workgroup_id a formData
+            const attendanceData = { ...formData, workgroup_id: workgroupId };
+
             try {
                 const response = await fetch('http://localhost:3000/attendance', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(attendanceData)
                 });
                 const data = await response.json();
                 if (response.ok) {

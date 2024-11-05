@@ -7,14 +7,15 @@ export default function RegisterEventForm() {
         event_date: '',
         location: '',
         description: '',
-        category_id: '' // Cambiado a category_id
+        category_id: '',
+        workgroup_id: '' // Agregar workgroup_id aquí
     });
 
-    const [categories, setCategories] = useState([]); // Estado para las categorías de boletos
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+            const workgroupId = localStorage.getItem('workgroup_id');
 
             if (!workgroupId) {
                 console.error('No se encontró workgroup_id en el local storage');
@@ -22,10 +23,10 @@ export default function RegisterEventForm() {
             }
 
             try {
-                const response = await fetch(`http://localhost:3000/ticket-categories?workgroup_id=${workgroupId}`); // Modificar la URL para incluir el workgroup_id
+                const response = await fetch(`http://localhost:3000/ticket-categories?workgroup_id=${workgroupId}`);
                 const data = await response.json();
                 if (response.ok) {
-                    setCategories(data.data); // Suponiendo que 'data' contiene la lista de categorías
+                    setCategories(data.data);
                 } else {
                     alert(data.error || 'Error al obtener categorías de boletos');
                 }
@@ -34,6 +35,13 @@ export default function RegisterEventForm() {
             }
         };
         fetchCategories();
+
+        // Establecer el workgroup_id en el estado del formulario
+        const workgroupId = localStorage.getItem('workgroup_id');
+        setFormData(prevState => ({
+            ...prevState,
+            workgroup_id: workgroupId // Asignar workgroup_id aquí
+        }));
     }, []);
 
     const handleChange = (e) => {
@@ -49,12 +57,12 @@ export default function RegisterEventForm() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData) // Enviar formData que ahora incluye workgroup_id
             });
             const data = await response.json();
             if (response.ok) {
                 alert('Evento creado exitosamente');
-                setFormData({ name: '', event_date: '', location: '', description: '', category_id: '' }); // Reset form
+                setFormData({ name: '', event_date: '', location: '', description: '', category_id: '', workgroup_id: '' }); // Reset form
             } else {
                 alert(data.error || 'Error al crear el evento');
             }
