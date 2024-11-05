@@ -60,7 +60,7 @@ export default function WorkgroupMembersTable() {
             if (response.ok) {
                 alert('Miembro eliminado exitosamente');
                 // Actualiza la lista de miembros
-                setMembers(members.filter(member => member.id !== memberToDelete));
+                setMembers(members.filter(member => member.admin_id !== memberToDelete));
             } else {
                 alert('Error al eliminar el miembro');
             }
@@ -68,6 +68,10 @@ export default function WorkgroupMembersTable() {
             console.error('Error:', error);
         }
         setIsModalOpen(false);
+    };
+
+    const handleViewClick = (id) => {
+        navigate(`/profile/${id}`); // Redirigir al perfil del miembro
     };
 
     // Paginación
@@ -93,7 +97,7 @@ export default function WorkgroupMembersTable() {
                 </thead>
                 <tbody>
                     {currentMembers.map(member => (
-                        <tr key={member.id}>
+                        <tr key={member.admin_id}>
                             <td className="border px-4 py-2">{member.admin_first_name}</td>
                             <td className="border px-4 py-2">{member.admin_last_name}</td>
                             <td className="border px-4 py-2">{member.role_name}</td>
@@ -102,13 +106,13 @@ export default function WorkgroupMembersTable() {
                             <td className="border px-4 py-2">
                                 <button
                                     className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black"
-                                    onClick={() => handleDeleteClick(member.id)} // Cambiar a la función de eliminación
+                                    onClick={() => handleViewClick(member.admin_id)} // Cambiar a la función de ver perfil
                                 >
                                     <FaEye />
                                 </button>
                                 <button
                                     className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black"
-                                    onClick={() => handleDeleteClick(member.id)}
+                                    onClick={() => handleDeleteClick(member.admin_id)}
                                 >
                                     <FaRegTrashAlt />
                                 </button>

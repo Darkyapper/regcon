@@ -27,6 +27,7 @@ import RegisterPrint from './pages/RegisterPrint';
 import AttenVal from './pages/AttenVal';
 import NotFound from './components/notFound/NotFound';
 import MyWorkGroup from './pages/MyWorkGroup';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -59,6 +60,7 @@ function App() {
         <Route path="/register/print" element={<RegisterPrint />} />
         <Route path="/attendance-validation" element={<AttenVal />} />
         <Route path="/my-workgroup" element={<MyWorkGroup />} />
+        <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

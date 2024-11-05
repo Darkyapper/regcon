@@ -615,14 +615,24 @@ app.get('/admin', async (req, res) => {
 
 app.get('/admin/:id', async (req, res) => {
     const { id } = req.params;
+    const workgroupId = req.query.workgroup_id; // Obtener el workgroup_id de la consulta
+
     try {
         const rows = await query('SELECT * FROM Admin WHERE id = $1', [id]);
         if (rows.length === 0) return res.status(404).json({ message: 'Admin not found' });
+
+        // Verificar si el admin pertenece al workgroup actual
+        const membershipCheck = await query('SELECT * FROM membership WHERE admin_id = $1 AND workgroup_id = $2', [id, workgroupId]);
+        if (membershipCheck.length === 0) {
+            return res.status(403).json({ message: 'Este administrador no pertenece al grupo de trabajo actual.' });
+        }
+
         res.json({ message: 'Success', data: rows[0] });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 app.post('/admin', async (req, res) => {
     const { first_name, last_name, email, phone, description, password } = req.body;

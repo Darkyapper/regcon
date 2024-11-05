@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-xuxu {
+    font-family: 'Noto Sans', sans-serif;
+    color: #121212;
+    font-size: 1.2rem;
+}
+
+.custom-xuxu .title {
+    font-family: 'Tilt Neon', sans-serif;
+    font-size: 2rem;
+    color: #121212;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.profile-info img {
+    margin-bottom: 15px;
+    width: 10rem;
+    height: 10rem;
+}
+
+.user-details {
+    text-align: left;
+}
