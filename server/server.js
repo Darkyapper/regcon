@@ -859,6 +859,40 @@ app.delete('/membership/:workgroup_id/:admin_id', async (req, res) => {
     }
 });
 
+// Obtener registros de la vista eventattendancesummary
+// Endpoint para obtener el resumen de asistencia filtrando por workgroup_id y event_id
+app.get('/eventattendancesummary', async (req, res) => {
+    const workgroupId = req.query.workgroup_id; // Obtener workgroup_id de la query
+    const eventId = req.query.event_id; // Obtener event_id de la query
+
+    try {
+        // Composición de la consulta
+        const queryText = 'SELECT * FROM eventattendancesummary WHERE workgroup_id = $1' + 
+                          (eventId ? ' AND event_id = $2' : '');
+        const queryParams = eventId ? [workgroupId, eventId] : [workgroupId];
+
+        const rows = await query(queryText, queryParams);
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Endpoint para obtener resumen de asistencia por event_id
+app.get('/eventattendancesummary/:event_id', async (req, res) => {
+    const { event_id } = req.params;
+    const workgroupId = req.query.workgroup_id; // Obtener workgroup_id de la query
+
+    try {
+        const rows = await query('SELECT * FROM eventattendancesummary WHERE event_id = $1 AND workgroup_id = $2', [event_id, workgroupId]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Event attendance summary not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 
 /***************************************************************
  * 

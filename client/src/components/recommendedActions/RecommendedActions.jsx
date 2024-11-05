@@ -9,8 +9,8 @@ export default function RecommendedActions() {
     const selectActionClic = (action) => {
         if (action === 'Crear boletos nuevos') {
             navigate('/tickets/add');
-        } else if (action === 'Crear informes de sus asistentes') {
-            navigate('/register/print');
+        } else if (action === 'Consulte las estadísticas de su organización') {
+            navigate('/stadistics');
         } else if (action === 'Conozca a su equipo') {
             navigate('/my-workgroup');
         } else if (action === 'Conozca y aprenda a usar RegCon') {
@@ -25,8 +25,8 @@ export default function RecommendedActions() {
                 <button onClick={() => selectActionClic('Crear boletos nuevos')} className="action-button">
                     Crear boletos nuevos
                 </button>
-                <button onClick={() => selectActionClic('Crear informes de sus asistentes')} className="action-button">
-                    Crear informes de sus asistentes
+                <button onClick={() => selectActionClic('Consulte las estadísticas de su organización')} className="action-button">
+                    Consulte las estadísticas de su organización
                 </button>
                 <button onClick={() => selectActionClic('Conozca a su equipo')} className="action-button">
                     Conozca a su equipo

@@ -42,7 +42,7 @@ export default function DashboardAHome() {
                     className="button-custom bg-teal-400 p-4 rounded-lg shadow-md text-white text-center cursor-pointer"
                     onClick={() => handleActionClick('Registrar Asistencia')}
                 >
-                    <h3 className="button-t-c">Registrar Asistencia</h3>
+                    <h3 className="button-t-c">Pre Registro</h3>
                     <div className="flex justify-center items-center">
                         <FiFilePlus className="icon-custom w-16 h-16" />
                     </div>

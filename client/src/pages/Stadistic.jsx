@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar/Navbar'
 import Sidebar from '../components/sidebar/Sidebar'
+import EventStatistics from '../components/eventStatistics/EventStatistics';
 
 export default function Stadistic() {
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function Stadistic() {
             <div className="flex flex-grow">
                 <Sidebar />
                 <div className="flex-grow ml-64 p-4 mt-16">
-
+                    <EventStatistics />
                 </div>
             </div>
         </div>
