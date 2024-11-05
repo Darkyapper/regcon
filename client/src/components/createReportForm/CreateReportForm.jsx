@@ -82,7 +82,7 @@ export default function CreateReportForm() {
             startY: 60, // Ajusta la posición de inicio de la tabla
             styles: {
                 overflow: 'linebreak',
-                fontSize: 10,
+                fontSize: 8,
                 cellPadding: 3,
                 halign: 'center',
                 valign: 'middle',

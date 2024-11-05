@@ -18,8 +18,15 @@ export default function CreateRegReport() {
 
     useEffect(() => {
         const fetchAttendances = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/attendance-info'); // Endpoint actualizado para obtener detalles de asistencia
+                const response = await fetch(`http://localhost:3000/attendance-info?workgroup_id=${workgroupId}`); // Endpoint actualizado para obtener detalles de asistencia
                 const data = await response.json();
                 if (response.ok) {
                     setAttendances(data.data); // Asumiendo que 'data' contiene la lista de asistencias
@@ -66,11 +73,11 @@ export default function CreateRegReport() {
             attendance.event_name, 
             attendance.ticket_code, 
             attendance.ticket_name, 
-            attendance.ticket_category, 
+            attendance.status, 
             attendance.registration_date
         ]);
         autoTable(doc, {
-            head: [['ID Asistencia', 'Nombre Usuario', 'Apellido Usuario', 'Evento', 'Código Boleto', 'Nombre Boleto', 'Categoría Boleto', 'Fecha de Registro']],
+            head: [['ID Asistencia', 'Nombre Usuario', 'Apellido Usuario', 'Evento', 'Código Boleto', 'Boleto', 'Estado de Asistencia', 'Fecha de Registro']],
             body: tableData,
             startY: 60, // Ajusta la posición de inicio de la tabla
             styles: {
@@ -86,7 +93,7 @@ export default function CreateRegReport() {
 
     return (
         <div className="create-report-form">
-            <h1 className="custom-au-title">Crear Informe de Registros de Asistencia</h1>
+            <h1 className="custom-au-title">Crear Informe de Asistencias</h1>
             <div className='custom-div-cs'>
                 <div>
                     <img src={image} alt="documento" className="image-example"/>

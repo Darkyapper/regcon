@@ -4,19 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.custom-cs{
+.custom-cs-ab{
     font-family: 'Noto Sans', sans-serif;
     color: #121212;
 }
 
-.tablas-chinas{
-    font-family: 'Noto Sans', sans-serif;
-    color: #121212;
-    font-size:0.8rem;
-}
-
-.title-uts{
+.title-uts-avs{
     font-family: 'Tilt Neon', sans-serif;
     font-size: 2rem;
     color: #121212;
 }
+

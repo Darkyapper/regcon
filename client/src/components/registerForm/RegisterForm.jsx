@@ -17,6 +17,7 @@ export default function RegisterForm() {
     const [qrModalVisible, setQrModalVisible] = useState(false);
     const [errorModalVisible, setErrorModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+    const [selectedEvent, setSelectedEvent] = useState(null); // Para almacenar el evento seleccionado
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -34,8 +35,15 @@ export default function RegisterForm() {
         };
 
         const fetchEvents = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/events');
+                const response = await fetch(`http://localhost:3000/events?workgroup_id=${workgroupId}`);
                 const data = await response.json();
                 if (response.ok) {
                     setEvents(data.data);
@@ -54,6 +62,12 @@ export default function RegisterForm() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+
+        // Si el evento es cambiado, se busca su información
+        if (name === 'event_id') {
+            const event = events.find(event => event.id === value);
+            setSelectedEvent(event); // Actualiza el evento seleccionado
+        }
     };
 
     const handleTicketValidation = async () => {
@@ -65,6 +79,27 @@ export default function RegisterForm() {
                 setErrorModalVisible(true);
                 return false;
             }
+
+            // Verifica que el tipo de boleto sea el correcto para el evento
+            if (selectedEvent) {
+                const eventResponse = await fetch(`http://localhost:3000/events/${selectedEvent.id}`);
+                const eventData = await eventResponse.json();
+
+                if (eventResponse.ok) {
+                    const eventCategoryId = eventData.data.category_id; // Asegúrate que tu evento tenga un campo category_id
+
+                    if (data.data.category_id !== eventCategoryId) {
+                        setModalMessage(`Este boleto no es válido para el evento '${selectedEvent.name}'. Se requiere un boleto de tipo adecuado.`);
+                        setErrorModalVisible(true);
+                        return false;
+                    }
+                } else {
+                    setModalMessage('Error al obtener información del evento.');
+                    setErrorModalVisible(true);
+                    return false;
+                }
+            }
+
             return true;
         } catch (error) {
             console.error('Error:', error);
@@ -120,7 +155,7 @@ export default function RegisterForm() {
     return (
         <div className="register-r-form p-4 bg-white rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="custom-wawa">Crear Registro de Asistencia</h2>
+                <h2 className="custom-wawa">Pre Registro a Evento</h2>
                 <button
                     className="bg-teal-400 text-white py-2 px-4 rounded hover:bg-teal-500"
                     onClick={handleAddUser}

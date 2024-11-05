@@ -13,7 +13,7 @@ export default function DashboardAHome() {
             navigate('/register/add');
         }
         else if (action === 'Validar Asistencia') {
-            navigate('/tickets/validate');
+            navigate('/attendance-validation');
         }
         else if (action === 'Crear Evento') {
             navigate('/events/add');

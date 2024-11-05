@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaDatabase, FaRegFile, FaChartPie } from "react-icons/fa";
+import { FaHome,  FaCheckCircle, FaRegFile, FaChartPie } from "react-icons/fa";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { MdEvent, MdCollectionsBookmark } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
@@ -68,6 +68,12 @@ export default function Sidebar() {
                             >
                                 <FaHome className="w-5 h-5" />
                                 <span className="ms-3">Inicio</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/attendance-validation" className="flex items-center p-2 text-[#EDEDED] rounded-lg hover:bg-orange-800 group">
+                                <FaCheckCircle className="w-5 h-5" />
+                                <span className="ms-3">Validar Asistencia</span>
                             </Link>
                         </li>
                         <li>
@@ -235,12 +241,12 @@ export default function Sidebar() {
                             </button>
                             <ul className={`py-2 space-y-2 ${isEquipoOpen ? 'block' : 'hidden'}`}>
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="/my-workgroup"
                                         className="flex items-center w-full p-2 text-[#EDEDED] transition duration-75 rounded-lg pl-11 group hover:bg-orange-800"
                                     >
                                         Mi Grupo de Trabajo
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <a

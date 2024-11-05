@@ -50,8 +50,15 @@ export default function EditRegForm() {
         };
 
         const fetchEvents = async () => {
+            const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
+            if (!workgroupId) {
+                console.error('No se encontró workgroup_id en el local storage');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/events');
+                const response = await fetch(`http://localhost:3000/events?workgroup_id=${workgroupId}`);
                 const data = await response.json();
                 if (response.ok) {
                     setEvents(data.data);

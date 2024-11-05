@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import './UsersTable.css';
+import './WorkgroupMembersTable.css';
 import { FaRegTrashAlt } from "react-icons/fa";
 import ConfirmDeleteModalU from '../confirmDeleteModalU/ConfirmDeleteModalU';
 import { useNavigate } from 'react-router-dom';
 
-export default function UsersTable() {
+export default function WorkgroupMembersTable() {
     const navigate = useNavigate();
-    const [users, setUsers] = useState([]);
+    const [members, setMembers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [usersPerPage] = useState(15);
+    const [membersPerPage] = useState(15);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [userToDelete, setUserToDelete] = useState(null);
+    const [memberToDelete, setMemberToDelete] = useState(null);
 
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchMembers = async () => {
             const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
 
             if (!workgroupId) {
@@ -22,36 +22,36 @@ export default function UsersTable() {
             }
 
             try {
-                const response = await fetch(`http://localhost:3000/usersmembership?workgroup_id=${workgroupId}`); // Cambiar endpoint
+                const response = await fetch(`http://localhost:3000/workgroupdetails/${workgroupId}`); // Cambiar endpoint
                 const data = await response.json();
                 if (response.ok) {
-                    setUsers(data.data); // Asegúrate de que 'data' contenga la lista de usuarios
+                    setMembers(data.data); // Asegúrate de que 'data' contenga la lista de miembros
                 } else {
-                    console.error('Error fetching users:', data.error);
+                    console.error('Error fetching members:', data.error);
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         };
-        fetchUsers();
+        fetchMembers();
     }, []);
 
     const handleDeleteClick = (id) => {
-        setUserToDelete(id);
+        setMemberToDelete(id);
         setIsModalOpen(true);
     };
 
     const confirmDelete = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/users/${userToDelete}`, {
+            const response = await fetch(`http://localhost:3000/users/${memberToDelete}`, {
                 method: 'DELETE',
             });
 
             if (response.ok) {
-                alert('Usuario eliminado exitosamente');
-                setUsers(users.filter(user => user.id !== userToDelete));
+                alert('Miembro eliminado exitosamente');
+                setMembers(members.filter(member => member.id !== memberToDelete));
             } else {
-                alert('Error al eliminar el usuario');
+                alert('Error al eliminar el miembro');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -60,42 +60,38 @@ export default function UsersTable() {
     };
 
     // Paginación
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    const indexOfLastMember = currentPage * membersPerPage;
+    const indexOfFirstMember = indexOfLastMember - membersPerPage;
+    const currentMembers = members.slice(indexOfFirstMember, indexOfLastMember);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <div className="p-4 bg-white rounded-lg shadow-md">
-            <h2 className="title-uts">Administrar Usuarios Registrados en Eventos</h2>
+            <h2 className="title-uts">Miembros del Grupo de Trabajo</h2>
             <table className="tablas min-w-full border-collapse">
                 <thead>
                     <tr>
                         <th className="border px-4 py-2">Nombre</th>
                         <th className="border px-4 py-2">Apellido</th>
-                        <th className="border px-4 py-2">Correo</th>
+                        <th className="border px-4 py-2">Rol</th>
                         <th className="border px-4 py-2">Teléfono</th>
-                        <th className="border px-4 py-2">Evento</th>
-                        <th className="border px-4 py-2">Estado</th>
-                        <th className="border px-4 py-2">Fecha de Registro</th>
+                        <th className="border px-4 py-2">Correo</th>
                         <th className="border px-4 py-2">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {currentUsers.map(user => (
-                        <tr key={user.id}>
-                            <td className="border px-4 py-2">{user.user_first_name}</td>
-                            <td className="border px-4 py-2">{user.user_last_name}</td>
-                            <td className="border px-4 py-2">{user.user_email}</td>
-                            <td className="border px-4 py-2">{user.user_phone}</td>
-                            <td className="border px-4 py-2">{user.event_name}</td>
-                            <td className="border px-4 py-2">{user.status}</td>
-                            <td className="border px-4 py-2">{new Date(user.registration_date).toLocaleString()}</td>
+                    {currentMembers.map(member => (
+                        <tr key={member.id}>
+                            <td className="border px-4 py-2">{member.admin_first_name}</td>
+                            <td className="border px-4 py-2">{member.admin_last_name}</td>
+                            <td className="border px-4 py-2">{member.role_name}</td>
+                            <td className="border px-4 py-2">{member.admin_phone}</td>
+                            <td className="border px-4 py-2">{member.admin_email}</td>
                             <td className="border px-4 py-2">
                                 <button 
                                     className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" 
-                                    onClick={() => handleDeleteClick(user.id)}
+                                    onClick={() => handleDeleteClick(member.id)}
                                 >
                                     <FaRegTrashAlt />
                                 </button>
@@ -106,7 +102,7 @@ export default function UsersTable() {
             </table>
             {/* Paginación */}
             <div className="flex justify-center mt-4">
-                {[...Array(Math.ceil(users.length / usersPerPage))].map((_, index) => (
+                {[...Array(Math.ceil(members.length / membersPerPage))].map((_, index) => (
                     <button 
                         key={index} 
                         onClick={() => paginate(index + 1)} 

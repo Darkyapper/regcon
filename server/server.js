@@ -344,19 +344,33 @@ app.delete('/tickets/:code', async (req, res) => {
 
 // Endpoint para tener los boletos con su información completa
 app.get('/ticket-view', async (req, res) => {
-    const { workgroup_id } = req.query; // Obtener el workgroup_id de la consulta
+    const { workgroup_id } = req.query; // Obtener ambos parámetros de consulta
 
     try {
-        // Filtrar tickets según el workgroup_id
+        // Filtrar tickets según el workgroup_id y el ticket_code
         const rows = await query('SELECT * FROM TicketFullInfo WHERE workgroup_id = $1', [workgroup_id]);
-        res.json({ message: 'Success', data: rows });
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket not found for this workgroup' });
+        res.json({ message: 'Success', data: rows[0] }); // Regresar solo un ticket
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/ticket-view-code', async (req, res) => {
+    const { ticket_code, workgroup_id } = req.query; // Obtener ambos parámetros de consulta
+
+    try {
+        // Filtrar tickets según el workgroup_id y el ticket_code
+        const rows = await query('SELECT * FROM TicketFullInfo WHERE code = $1 AND workgroup_id = $2', [ticket_code, workgroup_id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Ticket not found for this workgroup' });
+        res.json({ message: 'Success', data: rows[0] }); // Regresar solo un ticket
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
 
-app.get('/ticket-view/:code', async (req, res) => {
+app.get('/ticket-view-code/:code', async (req, res) => {
     const { code } = req.params;
     const workgroupId = req.query.workgroup_id; // Obtener el workgroup_id de la consulta
 
@@ -370,10 +384,26 @@ app.get('/ticket-view/:code', async (req, res) => {
 });
 
 
+app.get('/ticket-view/:code', async (req, res) => {
+    const workgroupId = req.query.workgroup_id; // Obtener el workgroup_id de la consulta
+
+    try {
+        const rows = await query('SELECT * FROM TicketFullInfo WHERE workgroup_id = $1', [workgroupId]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Este boleto no existe o es inválido.' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
 // Endpoints para registros (Attendance en lugar de Registration)
 app.get('/attendance', async (req, res) => {
+    const { ticket_code, workgroup_id } = req.query; // Obtener parámetros de consulta
+
     try {
-        const rows = await query('SELECT * FROM Attendance');
+        const rows = await query('SELECT * FROM Attendance WHERE ticket_code = $1 AND workgroup_id = $2', [ticket_code, workgroup_id]);
         res.json({ message: 'Success', data: rows });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -426,6 +456,23 @@ app.put('/attendance/:id', async (req, res) => {
     }
 });
 
+app.put('/attendance-status/:id', async (req, res) => {
+    const { status } = req.body; // Solo se obtiene el nuevo estado
+    const { id } = req.params;
+
+    try {
+        // Actualizar solo el estado en la asistencia, manteniendo los demás campos intactos
+        const rows = await query(
+            `UPDATE Attendance SET status = $1 WHERE id = $2 RETURNING *`,
+            [status, id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Attendance not found' });
+        res.json({ message: 'Attendance updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
 app.delete('/attendance/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -439,13 +486,16 @@ app.delete('/attendance/:id', async (req, res) => {
 
 // Endpoint para obtener los registros con información completa (AttendanceDetails en lugar de RegistrationDetails)
 app.get('/attendance-info', async (req, res) => {
+    const { workgroup_id } = req.query; // Obtener el workgroup_id de la consulta
+
     try {
-        const rows = await query('SELECT * FROM AttendanceDetails');
+        const rows = await query('SELECT * FROM attendancedetails WHERE workgroup_id = $1', [workgroup_id]); // Filtrar por workgroup_id
         res.json({ message: 'Success', data: rows });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 app.get('/attendance-info/:id', async (req, res) => {
     const { id } = req.params;
@@ -710,6 +760,27 @@ app.get('/usersmembership', async (req, res) => {
 
     try {
         const rows = await query('SELECT * FROM usersmembership WHERE workgroup_id = $1', [workgroup_id]); // Filtrar por workgroup_id
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Obtener todos los registros de la vista workgroupdetails
+app.get('/workgroupdetails', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM workgroupdetails');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/workgroupdetails/:workgroup_id', async (req, res) => {
+    const { workgroup_id } = req.params;
+    try {
+        const rows = await query('SELECT * FROM workgroupdetails WHERE workgroup_id = $1', [workgroup_id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Work group details not found' });
         res.json({ message: 'Success', data: rows });
     } catch (error) {
         res.status(500).json({ error: error.message });

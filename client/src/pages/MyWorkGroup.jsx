@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/navbar/Navbar'
 import Sidebar from '../components/sidebar/Sidebar'
-import ValidateAttendanceForm from '../components/validateAttendanceForm/ValidateAttendanceForm';
+import WorkgroupMembersTable from '../components/workgroupMembersTable/WorkgroupMembersTable';
 
-export default function AttenVal() {
+export default function MyWorkGroup() {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export default function AttenVal() {
             <div className="flex flex-grow">
                 <Sidebar />
                 <div className="flex-grow ml-64 p-4 mt-16">
-                    <ValidateAttendanceForm />
+                    <WorkgroupMembersTable />
                 </div>
             </div>
         </div>
