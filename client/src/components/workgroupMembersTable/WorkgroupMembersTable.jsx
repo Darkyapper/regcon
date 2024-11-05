@@ -11,6 +11,7 @@ export default function WorkgroupMembersTable() {
     const [membersPerPage] = useState(15);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [memberToDelete, setMemberToDelete] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(''); // Estado para el mensaje de error
 
     useEffect(() => {
         const fetchMembers = async () => {
@@ -37,18 +38,28 @@ export default function WorkgroupMembersTable() {
     }, []);
 
     const handleDeleteClick = (id) => {
+        const roleId = localStorage.getItem('role_id'); // Obtener el role_id del localStorage
+
+        if (roleId !== '1') { // Verificar si el rol no es igual a 1
+            setErrorMessage('Solo el administrador propietario puede eliminar miembros.'); // Establecer mensaje de error
+            return; // Salir de la función sin abrir el modal
+        }
+
         setMemberToDelete(id);
         setIsModalOpen(true);
     };
 
     const confirmDelete = async () => {
+        const workgroupId = localStorage.getItem('workgroup_id'); // Obtén el workgroup_id
+
         try {
-            const response = await fetch(`http://localhost:3000/users/${memberToDelete}`, {
+            const response = await fetch(`http://localhost:3000/membership/${workgroupId}/${memberToDelete}`, {
                 method: 'DELETE',
             });
 
             if (response.ok) {
                 alert('Miembro eliminado exitosamente');
+                // Actualiza la lista de miembros
                 setMembers(members.filter(member => member.id !== memberToDelete));
             } else {
                 alert('Error al eliminar el miembro');
@@ -91,7 +102,8 @@ export default function WorkgroupMembersTable() {
                             <td className="border px-4 py-2">
                                 <button
                                     className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black"
-                                    onClick={() => handleDeleteClick(member.id)}>
+                                    onClick={() => handleDeleteClick(member.id)} // Cambiar a la función de eliminación
+                                >
                                     <FaEye />
                                 </button>
                                 <button
@@ -124,6 +136,12 @@ export default function WorkgroupMembersTable() {
                 onClose={() => setIsModalOpen(false)}
                 onConfirm={confirmDelete}
             />
+            {/* Mensaje de error */}
+            {errorMessage && (
+                <div className="mt-4 p-4 border rounded bg-red-100">
+                    <p className="text-red-500">{errorMessage}</p>
+                </div>
+            )}
         </div>
     );
 }

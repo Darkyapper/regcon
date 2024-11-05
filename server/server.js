@@ -789,6 +789,67 @@ app.get('/workgroupdetails/:workgroup_id', async (req, res) => {
     }
 });
 
+// Endpoints para membresías
+app.get('/membership', async (req, res) => {
+    try {
+        const rows = await query('SELECT * FROM membership');
+        res.json({ message: 'Success', data: rows });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/membership/:workgroup_id/:admin_id', async (req, res) => {
+    const { workgroup_id, admin_id } = req.params;
+    try {
+        const rows = await query('SELECT * FROM membership WHERE workgroup_id = $1 AND admin_id = $2', [workgroup_id, admin_id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Membership not found' });
+        res.json({ message: 'Success', data: rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/membership', async (req, res) => {
+    const { workgroup_id, admin_id, role_id } = req.body;
+    try {
+        const rows = await query(
+            'INSERT INTO membership (workgroup_id, admin_id, role_id) VALUES ($1, $2, $3) RETURNING *',
+            [workgroup_id, admin_id, role_id]
+        );
+        res.json({ message: 'Membership created successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.put('/membership/:workgroup_id/:admin_id', async (req, res) => {
+    const { workgroup_id, admin_id } = req.params;
+    const { role_id } = req.body;
+    try {
+        const rows = await query(
+            'UPDATE membership SET role_id = $1 WHERE workgroup_id = $2 AND admin_id = $3 RETURNING *',
+            [role_id, workgroup_id, admin_id]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: 'Membership not found' });
+        res.json({ message: 'Membership updated successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.delete('/membership/:workgroup_id/:admin_id', async (req, res) => {
+    const { workgroup_id, admin_id } = req.params;
+    try {
+        const rows = await query('DELETE FROM membership WHERE workgroup_id = $1 AND admin_id = $2 RETURNING workgroup_id, admin_id', [workgroup_id, admin_id]);
+        if (rows.length === 0) return res.status(404).json({ message: 'Membership not found' });
+        res.json({ message: 'Membership deleted successfully', data: rows[0] });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+
 /***************************************************************
  * 
  *             ENPOINTS PARA PAGINA USUARIOS
