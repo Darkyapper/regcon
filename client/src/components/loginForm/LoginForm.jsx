@@ -78,6 +78,7 @@ export default function LoginForm() {
                             Acceder
                         </button>
                     </div>
+                    <p className='pics-as mt-2'>¿No tienes una cuenta? <a className="just-it-a" href="">Regístrate aquí</a></p>
                 </form>
             </div>
         </div>

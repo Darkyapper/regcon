@@ -30,6 +30,18 @@ form .title-form {
     line-height: normal;
 }
 
+.just-it-a{
+    text-align: center;
+    margin-top: 2rem;
+    color: rgb(40, 40, 238);
+    text-decoration:underline;
+}
+
+.pics-as{
+    justify-content: center;
+    text-align: center;
+}
+
 form .description-form {
     text-align: center;
     font-family: "Noto Sans";
@@ -44,3 +56,4 @@ form .button-to-access{
     display: flex;
     margin-top: 1rem;
 }
+
