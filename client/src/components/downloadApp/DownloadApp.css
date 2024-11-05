@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-content-ess {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #000;
+    text-align: center;
+    display: flex; /* Usar flex para centrar el contenido */
+    flex-direction: column; /* Apilar elementos verticalmente */
+    justify-content: center; /* Centrar verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+    min-height: 100vh; /* Ocupa toda la altura de la vista */
+    margin: 0; /* Quitar márgenes por defecto */
+}
+.custom-content-ess h1 {
+    font-family: 'Tilt Neon', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #131313;
+    margin: 0;
+}
+.custom-content-ess p {
+    font-size: 1.2rem;
+}
+
+.custom-content-ess img {
+    width: 50%;
+    height: auto;
+    margin-top: 2rem;
+}
+
+.download-button {
+    margin-top: 2rem;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: transparent; /* Sin fondo */
+    border: 2px solid #EB6D1E; /* Color del borde */
+    color: #EB6D1E; /* Color del texto */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: not-allowed; /* Cambiar el cursor para indicar que no es clickeable */
+    transition: background-color 0.3s, color 0.3s; /* Transición para el hover */
+}
+
+.download-button:hover {
+    background-color: rgba(235, 109, 30, 0.1); /* Color de fondo en hover */
+    color: #EB6D1E; /* Mantener el color del texto */
+    opacity: 0.8; /* Leve opacidad al pasar el mouse */
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaBell, FaUser } from 'react-icons/fa';
+import { FaBell, FaUser, FaCheck  } from 'react-icons/fa';
 import { IoGrid } from "react-icons/io5";
 import './Navbar.css';
 import logo from '../../assets/regcon-logo.png'
@@ -22,7 +22,7 @@ export default function Navbar() {
                         <FaBell />
                     </button>
                     <button className="grid-c hover:text-white">
-                        <IoGrid />
+                        <FaCheck  />
                     </button>
                     <Link to={`/profile/${adminId}`}>
                         <img

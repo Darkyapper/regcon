@@ -29,6 +29,7 @@ import NotFound from './components/notFound/NotFound';
 import MyWorkGroup from './pages/MyWorkGroup';
 import ProfilePage from './pages/ProfilePage';
 import Stadistic from './pages/Stadistic';
+import NoWebCont from './pages/NoWebCont';
 
 function App() {
   return (
@@ -63,6 +64,8 @@ function App() {
         <Route path="/my-workgroup" element={<MyWorkGroup />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/stadistics" element={<Stadistic />} />
+        <Route path="/app/configuration" element={<NoWebCont />} /> //CAMBIAR RUTA A FUTURO
+        <Route path="/app/database" element={<NoWebCont />} /> //CAMBIAR RUTA A FUTURO
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

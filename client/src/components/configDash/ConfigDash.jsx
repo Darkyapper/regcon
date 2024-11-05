@@ -16,35 +16,60 @@ export default function ConfigDash() {
         navigate('/'); // Asegúrate de que esta ruta sea la correcta
     };
 
+    const handleSettings = () => {
+        // Redirigir a la página de configuración
+        navigate('/app/configuration'); // Asegúrate de que esta ruta sea la correcta
+    }
+
+    const handleDB = () => {
+        // Redirigir a la página de configuración de bases de datos
+        navigate('/app/database'); // Asegúrate de que esta ruta sea la correcta
+    }
+
+    const handleProfileSettings = () => {
+        const adminId = localStorage.getItem('user_id'); // Obtén el ID del administrador del localStorage
+        if (adminId) {
+            navigate(`/profile/${adminId}`); // Redirigir a la configuración del perfil del administrador
+        } else {
+            console.error('No se encontró el ID del administrador en el almacenamiento local.');
+        }
+    }
+
+    const handleHelp = () => {
+        // Redirigir a la página de ayuda
+        navigate('/app/help'); // Asegúrate de que esta ruta sea la correcta
+    }
+
     return (
         <div className="recommended-actions p-4 bg-white rounded-lg shadow-md">
             <h1 className="text-lg mb-4">Configuraciones</h1>
             <div className="flex flex-col gap-4">
-                <button className="action-button flex items-center">
+                <button onClick={handleSettings} className="action-button flex items-center">
                     <IoSettingsSharp className="mr-2 text-lg" />
                     Configuración de la aplicación
                 </button>
-                <button className="action-button flex items-center">
+                <button onClick={handleProfileSettings} className="action-button flex items-center"> {/* Cambiar a función de redirección */}
                     <FaUserCircle className="mr-2 text-lg" />
                     Configuración del perfil
                 </button>
-                <button className="action-button flex items-center">
+                <button onClick={handleDB} className="action-button flex items-center">
                     <FaDatabase className="mr-2 text-lg" />
                     Configuración de bases de datos
                 </button>
-                <button className="action-button flex items-center">
-                    <ImFilesEmpty className="mr-2 text-lg" />
-                    Documentación Oficial
-                </button>
-                <button className="action-button flex items-center">
+                <a className="action-button flex items-center" href="https://splendid-ixia-8ff.notion.site/Documentaci-n-Oficial-de-RegCon-Para-Usuarios-135632bfa8ac80d68922d2d01426e696">
+                    <button className=" flex items-center">
+                        <ImFilesEmpty className="mr-2 text-lg" />
+                        Documentación Oficial
+                    </button>
+                </a>
+                {/*<button className="action-button flex items-center">
                     <FaKey className="mr-2 text-lg" />
                     Licencia y activación
-                </button>
-                <button className="action-button flex items-center">
+                </button>*/}
+                <button onClick={handleHelp} className="action-button flex items-center">
                     <IoHelpBuoy className="mr-2 text-lg" />
                     Ayuda y soporte
                 </button>
-                {/* Cambia Link a button para manejar el logout */}
                 <button onClick={handleLogout} className='action-button flex items-center'>
                     <IoIosLogOut className="mr-2 text-lg" />
                     Cerrar Sesión
