@@ -748,7 +748,7 @@ app.post('/login', async (req, res) => {
         // Crear un token
         const token = jwt.sign({ id: admin[0].id, workgroup_id }, 'tu_secreto_aqui', { expiresIn: '1h' });
 
-        res.json({ message: 'Inicio de sesión exitoso', token, workgroup_id });
+        res.json({ message: 'Inicio de sesión exitoso', token, workgroup_id, user_id: admin[0].id }); // Agregar user_id aquí
     } catch (error) {
         res.status(500).json({ error: 'Error del servidor' });
     }

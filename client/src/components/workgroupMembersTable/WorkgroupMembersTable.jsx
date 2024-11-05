@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './WorkgroupMembersTable.css';
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt, FaEye } from "react-icons/fa";
 import ConfirmDeleteModalU from '../confirmDeleteModalU/ConfirmDeleteModalU';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,7 +69,7 @@ export default function WorkgroupMembersTable() {
     return (
         <div className="p-4 bg-white rounded-lg shadow-md">
             <h2 className="title-uts">Miembros del Grupo de Trabajo</h2>
-            <table className="tablas min-w-full border-collapse">
+            <table className="tablas-cs min-w-full border-collapse">
                 <thead>
                     <tr>
                         <th className="border px-4 py-2">Nombre</th>
@@ -89,8 +89,13 @@ export default function WorkgroupMembersTable() {
                             <td className="border px-4 py-2">{member.admin_phone}</td>
                             <td className="border px-4 py-2">{member.admin_email}</td>
                             <td className="border px-4 py-2">
-                                <button 
-                                    className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black" 
+                                <button
+                                    className="button-cs mx-1 px-4 py-2 rounded bg-teal-400 text-white hover:text-black"
+                                    onClick={() => handleDeleteClick(member.id)}>
+                                    <FaEye />
+                                </button>
+                                <button
+                                    className="button-cs mx-1 px-4 py-2 rounded bg-red-600 text-white hover:text-black"
                                     onClick={() => handleDeleteClick(member.id)}
                                 >
                                     <FaRegTrashAlt />
@@ -103,9 +108,9 @@ export default function WorkgroupMembersTable() {
             {/* Paginación */}
             <div className="flex justify-center mt-4">
                 {[...Array(Math.ceil(members.length / membersPerPage))].map((_, index) => (
-                    <button 
-                        key={index} 
-                        onClick={() => paginate(index + 1)} 
+                    <button
+                        key={index}
+                        onClick={() => paginate(index + 1)}
                         className={`button-cs mx-1 px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-teal-400 text-white' : 'bg-gray-200'}`}
                     >
                         {index + 1}
@@ -114,9 +119,9 @@ export default function WorkgroupMembersTable() {
             </div>
 
             {/* Modal de confirmación */}
-            <ConfirmDeleteModalU 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
+            <ConfirmDeleteModalU
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
                 onConfirm={confirmDelete}
             />
         </div>

@@ -10,9 +10,6 @@ export default function LoginForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-    
         try {
             const response = await fetch('http://localhost:3000/login', {
                 method: 'POST',
@@ -24,16 +21,20 @@ export default function LoginForm() {
     
             const data = await response.json();
             if (response.ok) {
+                // Guardar el token, workgroup_id y user_id en localStorage
                 localStorage.setItem('token', data.token);
-                localStorage.setItem('workgroup_id', data.workgroup_id); // Asegúrate de que esto se esté estableciendo
-                navigate('/dashboard');
+                localStorage.setItem('workgroup_id', data.workgroup_id); 
+                localStorage.setItem('user_id', data.user_id); // Almacenar el ID del usuario
+                navigate('/dashboard'); // Navega a la página de dashboard o donde desees
             } else {
-                alert(data.error);
+                setError(data.error);
             }
         } catch (error) {
             console.error('Error en la solicitud de inicio de sesión:', error);
+            setError('Error al intentar iniciar sesión.');
         }
     };
+    
     
     return (
         <div className='main-container'>
